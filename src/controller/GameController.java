@@ -1,4 +1,7 @@
-package client;
+package controller;
+
+import client.Model;
+import client.Player;
 
 public class GameController implements IGameController
 {
