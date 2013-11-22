@@ -37,34 +37,55 @@ public class GameController implements IGameController
 
 	public void gameOver()
 	{
+		model.setGameOver(true);
 		System.out.println("fin de partie");
-		
 	}
 
 	@Override
 	public void moveUp()
 	{
-		model.getActivePlayer().moveUp();
+		if (model.getActivePlayer().getPositionY() - 1 >= 0)
+		{
+			model.getActivePlayer().moveUp();
+		}
+		
 		
 	}
 
 	@Override
 	public void moveDown()
 	{
-		model.getActivePlayer().moveDown();
+		if (model.getActivePlayer().getPositionY() + 1 <= 6)
+		{
+			model.getActivePlayer().moveDown();
+		}
 	}
 
 	@Override
 	public void moveLeft()
 	{
-		model.getActivePlayer().moveLeft();
+		if (model.getActivePlayer().getPositionX() - 1 >= 0)
+		{
+			model.getActivePlayer().moveLeft();
+		}
+		
 	}
 
 	@Override
 	public void moveRight()
 	{
-		model.getActivePlayer().moveRight();
+		if (model.getActivePlayer().getPositionX() + 1 <= 6)
+		{
+			model.getActivePlayer().moveRight();
+		}
+		
 	}
+
+	public Model getModel()
+	{
+		return model;
+	}
+
 	
 	
 }

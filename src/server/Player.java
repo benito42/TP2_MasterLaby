@@ -3,17 +3,19 @@ package server;
 
 public class Player
 {
-	private String name;
-	private String avatar;
+	private String name = "DEFAULT";
+	private String avatar = "DEFAULT";
 	private int positionX;
 	private int positionY;
 	private Objective[] objectiveList = new Objective[3];
-	
-	public Player()
-	{
-		
-	}
 
+
+	public Player(int positionX, int positionY)
+	{
+		this.positionX = positionX;
+		this.positionY = positionY;
+	}
+	
 	public Player(String name, String avatar, int positionX, int positionY)
 	{
 		this.name = name;
