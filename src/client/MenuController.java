@@ -1,6 +1,6 @@
 package client;
 
-public class MenuController
+public class MenuController implements IMenuController
 {
 	public static void main(String[] args) 
 	{
@@ -9,7 +9,8 @@ public class MenuController
 	
 	public MenuController()
 	{
-		
+		IMenuView view = new MenuView(this);
+		view.showView();
 	}
 	
 }
