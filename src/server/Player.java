@@ -1,4 +1,5 @@
-package client;
+package server;
+
 
 public class Player
 {

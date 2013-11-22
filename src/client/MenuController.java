@@ -1,4 +1,4 @@
-package controller;
+package client;
 
 public class MenuController
 {

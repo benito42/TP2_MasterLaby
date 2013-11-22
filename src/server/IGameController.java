@@ -1,6 +1,5 @@
-package controller;
+package server;
 
-import client.Player;
 
 public interface IGameController
 {

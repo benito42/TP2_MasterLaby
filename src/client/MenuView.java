@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import controller.MenuController;
-
 public class MenuView extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 570336988907402917L;

@@ -1,6 +1,7 @@
 package client;
 
-import controller.GameController;
+import server.GameController;
+
 
 public class MasterLabyMain {
 

@@ -1,7 +1,5 @@
-package controller;
+package server;
 
-import client.Model;
-import client.Player;
 
 public class GameController implements IGameController
 {
