@@ -12,5 +12,16 @@ public class MenuController implements IMenuController
 		IMenuView view = new MenuView(this);
 		view.showView();
 	}
-	
+
+	@Override
+	public void showRules() 
+	{
+		new RulesView();
+	}
+
+	@Override
+	public void showLeaders() 
+	{
+		
+	}
 }
