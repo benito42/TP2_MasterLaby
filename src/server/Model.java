@@ -12,6 +12,7 @@ public class Model
 	private LinkedList<Player> playerList;
 	private boolean gameOver = false;
 	private Tile[][] board = new Tile[7][7];
+	private Tile nextTile;
 
 	public Model()
 	{
@@ -235,6 +236,8 @@ public class Model
 
 		Tile tempTile66 = new Tile(TILETYPE.up_left, 6, 6);
 		board[6][6] = tempTile66;
+		
+		this.nextTile = new Tile(TILETYPE.horizontal_up, -1, -1);
 	}
 	
 	public Tile getTile(int xPosition, int yPosition)
@@ -246,28 +249,58 @@ public class Model
 	{
 		
 	}
+	
+	public Tile getNextTile()
+	{
+		return this.nextTile;
+	}
 
 	public void shiftTiles(int index, Direction direction)
 	{
 		Tile tempTile;
+		int x = 0;
+		int y = 0;
 		
 		switch(direction)
 		{
 		case LEFT:
+				y = index;
+				x = 0;
 				
 			break;
 		case DOWN:
-			
+				y = 6;
+				x = index;
 			break;
 		case RIGHT:
-			
+				y = index;
+				x = 6;
+				tempTile = this.getTile(x, y);
+				tempTile.setPositionX(-1);
+				tempTile.setPositionY(-1);
+				
+				for(x = 6; x >= 1; x--)
+				{
+					this.board[x][y] = this.board[x - 1][y];
+					this.board[x][y].setPositionX(x);
+				}
+				
+				this.nextTile.setPositionX(0);
+				this.nextTile.setPositionY(y);
+				this.board[x][y] = this.nextTile;
+				this.nextTile = tempTile;
+				
 			break;
 		case UP:
-			
+				y = 0;
+				x = index;
 			break;
 		default:
-			
+				y = -1;
+				x = -1;
 			break;
 		}
+		
+		
 	}
 }
