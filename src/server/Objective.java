@@ -2,6 +2,7 @@ package server;
 
 public class Objective
 {
+	private Tile currentTile;
 	private String name;
 	private int positionX;
 	private int positionY;
@@ -49,6 +50,14 @@ public class Objective
 
 	public void setObjectiveReached(boolean objectiveReached) {
 		this.objectiveReached = objectiveReached;
+	}
+
+	public Tile getCurrentTile() {
+		return currentTile;
+	}
+
+	public void setCurrentTile(Tile currentTile) {
+		this.currentTile = currentTile;
 	}
 	
 

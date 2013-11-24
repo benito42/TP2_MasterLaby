@@ -3,6 +3,7 @@ package server;
 
 public class Player
 {
+	private Tile currentTile;
 	private String name = "DEFAULT";
 	private String avatar = "DEFAULT";
 	private int positionX;
@@ -84,6 +85,14 @@ public class Player
 	public void moveRight()
 	{
 		positionX++;
+	}
+
+	public Tile getCurrentTile() {
+		return currentTile;
+	}
+
+	public void setCurrentTile(Tile currentTile) {
+		this.currentTile = currentTile;
 	}
 		
 }

@@ -9,6 +9,8 @@ import org.junit.Test;
 import server.GameController;
 import server.Model;
 import server.Player;
+import server.Tile;
+import server.Tile.TILETYPE;
 
 public class GameControllerTest
 {
@@ -181,6 +183,15 @@ public class GameControllerTest
 
 		assertEquals(3, controller.getModel().getTurnNbr());
 		
+	}
+	
+	@Test
+	public void buildBoardTest()
+	{
+		controller.buildBoard();
+
+		assertEquals(controller.getModel().getTile(0, 0).getTileType(), TILETYPE.down_right);
+		assertEquals(controller.getModel().getTile(0, 1).getTileType(), TILETYPE.down_left);
 	}
 
 }

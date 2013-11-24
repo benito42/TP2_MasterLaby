@@ -86,6 +86,11 @@ public class GameController implements IGameController
 		return model;
 	}
 
+	public void buildBoard()
+	{
+		model.buildBoard();
+	}
+
 	
 	
 }
