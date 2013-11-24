@@ -15,28 +15,30 @@ public class Tile
 	
 	public enum TILETYPE
 	{
-		horizontal(false, true, false, true), 
-		vertical(true, false, true, false),
-		horizontal_up(true, true, false, true),
-		horizontal_down(false, true, true, true),
-		vertical_right(true, true, true, false),
-		vertical_left(true, false, true, true),
-		up_left(true, false, false, true),
-		up_right(true, true, false, false),
-		down_left(false, false, true, true),
-		down_right(false, true, true, false);
+		horizontal(false, true, false, true, "/img/horizontal.jpg"), 
+		vertical(true, false, true, false, "/img/vertical.jpg"),
+		horizontal_up(true, true, false, true, "/img/horizontal_up.jpg"),
+		horizontal_down(false, true, true, true, "/img/horizontal_down.jpg"),
+		vertical_right(true, true, true, false, "/img/vertical_right.jpg"),
+		vertical_left(true, false, true, true, "/img/vertical_left.jpg"),
+		up_left(true, false, false, true, "/img/up_left.jpg"),
+		up_right(true, true, false, false, "/img/up_right.jpg"),
+		down_left(false, false, true, true, "/img/down_left.jpg"),
+		down_right(false, true, true, false, "/img/down_right.jpg");
 		
 		private final boolean goUp;
 		private final boolean goRight;
 		private final boolean goDown;
 		private final boolean goLeft;
+		private final String path;
 		
-		TILETYPE(boolean goUp, boolean goRight, boolean goDown, boolean goLeft)
+		TILETYPE(boolean goUp, boolean goRight, boolean goDown, boolean goLeft, String path)
 		{
 			this.goUp = goUp;
 			this.goRight = goRight;
 			this.goDown = goDown;
 			this.goLeft = goLeft;
+			this.path = path;
 		}
 	}
 
@@ -44,6 +46,7 @@ public class Tile
 	public boolean goRight(){return tileType.goRight;}
 	public boolean goDown(){return tileType.goDown;}
 	public boolean goLeft(){return tileType.goLeft;}
+	public String getPath(){return tileType.path;}
 	
 	public Tile(TILETYPE tileType, int positionX, int positionY)
 	{

@@ -35,7 +35,7 @@ public class RulesView extends JFrame implements ActionListener
 	{
 		JPanel imagePanel = new JPanel();
 		
-		URL input = this.getClass().getResource("/img/Reglements.jpg");
+		URL input = this.getClass().getResource("/img/rules.jpg");
 		ImageIcon img = new ImageIcon(input);
 		
 		imagePanel.add(new JLabel(img));
