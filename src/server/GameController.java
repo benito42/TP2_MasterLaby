@@ -1,15 +1,21 @@
 package server;
 
+import client.GameView;
+import client.IGameView;
+
 
 public class GameController implements IGameController
 {
 
 	private Model model;
+	private IGameView gameView;
 	
 	public GameController()
 	{
 		model = new Model();
 		buildBoard();
+		gameView = new GameView(this);
+		gameView.showGameView();
 	}
 
 	@Override

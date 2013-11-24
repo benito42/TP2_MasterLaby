@@ -50,7 +50,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		this.setLayout(new BorderLayout());
         this.setFocusable(true);
         
-        this.buildBoardGridBagLayout();
+        this.buildBoardBagLayout();
         this.buildObjectivesLayout();
         
         mainPanel.add(boardPanel, BorderLayout.WEST);
@@ -60,9 +60,11 @@ public class GameView extends JFrame implements ActionListener, IGameView
         this.pack();
 	}
 	
-	private void buildBoardGridBagLayout()
+	private void buildBoardBagLayout()
 	{
 		this.buildTileGridLayout();
+		
+		boardPanel.add(tilePanel);
 		/*
 		boardPanel.setLayout(new GridLayout(3, 1));
 		

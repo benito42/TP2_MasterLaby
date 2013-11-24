@@ -15,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import server.GameController;
+import server.IGameController;
+
 public class MenuView extends JFrame implements ActionListener, IMenuView
 {
 	private static final long serialVersionUID = 570336988907402917L;
@@ -66,6 +69,13 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 		return buttonsPanel;
 	}
 	
+	private void startGame()
+	{
+		IGameController gameController = new GameController();
+		
+		
+	}
+	
 	private void configureWindow()
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,6 +102,10 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 		else if(ae.getSource() == this.btnRules)
 		{
 			this.controller.showRules();
+		}
+		else if (ae.getSource() == this.btnStart)
+		{
+			this.startGame();
 		}
 		/*else if(ae.getSource() == this.btnLeaders)
 		{
