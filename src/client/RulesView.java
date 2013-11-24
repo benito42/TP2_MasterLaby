@@ -2,10 +2,10 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +13,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.RootPaneContainer;
 
 public class RulesView extends JFrame implements ActionListener
 {
@@ -25,23 +24,26 @@ public class RulesView extends JFrame implements ActionListener
 	public RulesView()
 	{
 		this.setLayout(new BorderLayout());
-		this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Benoît\\Documents\\GitHub\\TP2_MasterLaby\\src\\img\\Reglements.jpg")));
-		this.setLayout(new FlowLayout());
-		this.add(this.setButtonsPanel(), BorderLayout.SOUTH);
+		
+		this.add(this.getRulesPanel(), BorderLayout.NORTH);
+		this.add(this.getButtonsPanel(), BorderLayout.SOUTH);
 		
 		this.configureWindow();
 	}
 	
-	private JPanel setRulesPanel()
+	private JPanel getRulesPanel()
 	{
 		JPanel imagePanel = new JPanel();
 		
-		this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Benoît\\Documents\\GitHub\\TP2_MasterLaby\\src\\img\\Reglements.jpg")));
+		URL input = this.getClass().getResource("/img/Reglements.jpg");
+		ImageIcon img = new ImageIcon(input);
+		
+		imagePanel.add(new JLabel(img));
 		
 		return imagePanel;
 	}
 	
-	private JPanel setButtonsPanel()
+	private JPanel getButtonsPanel()
 	{
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setOpaque(false);

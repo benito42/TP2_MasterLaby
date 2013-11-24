@@ -6,7 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
+import java.net.URL;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -23,7 +23,7 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 	private JButton btnExit = new JButton("Quitter");
 	private JButton btnStart = new JButton("Démarrer une partie");
 	private JButton btnRules = new JButton("Règlements");
-	private JButton btnLeaders = new JButton("Tableau des meneurs");
+	//private JButton btnLeaders = new JButton("Tableau des meneurs");
 	
 	public MenuView(IMenuController controller)
 	{
@@ -35,7 +35,11 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 	private void setLayout()
 	{
 		this.setLayout(new BorderLayout());
-	    this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Benoît\\Documents\\GitHub\\TP2_MasterLaby\\src\\img\\aMAZEing_LABYRINTH.jpg")));
+		
+		URL input = this.getClass().getResource("/img/aMAZEing_LABYRINTH.jpg");
+		ImageIcon img = new ImageIcon(input);
+		
+	    this.setContentPane(new JLabel(img));
 	    this.setLayout(new FlowLayout());
 	    
 	    this.add(this.setButtonsPanel());
@@ -52,11 +56,11 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 		this.btnExit.addActionListener(this);
 		this.btnStart.addActionListener(this);
 		this.btnRules.addActionListener(this);
-		this.btnLeaders.addActionListener(this);
+		//this.btnLeaders.addActionListener(this);
 		
 		buttonsPanel.add(this.btnStart);
 		buttonsPanel.add(this.btnRules);
-		buttonsPanel.add(this.btnLeaders);
+		//buttonsPanel.add(this.btnLeaders);
 		buttonsPanel.add(this.btnExit);
 		
 		return buttonsPanel;
@@ -89,9 +93,9 @@ public class MenuView extends JFrame implements ActionListener, IMenuView
 		{
 			this.controller.showRules();
 		}
-		else if(ae.getSource() == this.btnLeaders)
+		/*else if(ae.getSource() == this.btnLeaders)
 		{
 			this.controller.showLeaders();
-		}
+		}*/
 	}
 }

@@ -18,10 +18,4 @@ public class MenuController implements IMenuController
 	{
 		new RulesView();
 	}
-
-	@Override
-	public void showLeaders() 
-	{
-		
-	}
 }
