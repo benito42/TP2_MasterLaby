@@ -10,7 +10,7 @@ public interface IGameController
 	public void nextPlayer();
 	
 	public void gameOver();
-	
+	public Model getModel();
 	public void moveUp();
 	public void moveDown();
 	public void moveLeft();
