@@ -188,10 +188,8 @@ public class GameControllerTest
 	@Test
 	public void buildBoardTest()
 	{
-		controller.buildBoard();
-
 		assertEquals(controller.getModel().getTile(0, 0).getTileType(), TILETYPE.down_right);
-		assertEquals(controller.getModel().getTile(0, 1).getTileType(), TILETYPE.down_left);
+		assertEquals(controller.getModel().getTile(1, 0).getTileType(), TILETYPE.down_left);
 	}
 
 }

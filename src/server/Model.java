@@ -74,6 +74,17 @@ public class Model
 	
 	private void buildTiles()
 	{
+		/*
+rd.dl.rdl.ud.rdl.rd.dl
+ur.ud.rd.dl.ud.rl.rl
+urd.rl.urd.rl.rdl.dl.udl
+rl.rd.ud.ul.ud.ul.rl
+urd.ur.url.rl.udl.rl.udl
+rd.rl.ud.ur.ul.ud.dl
+ur.ul.url.ud.url.ur.ul
+		 */
+		
+		
 		//first row
 		//rd.dl.rdl.ud.rdl.rd.dl
 		Tile tempTile00 = new Tile(TILETYPE.down_right);

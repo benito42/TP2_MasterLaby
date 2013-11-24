@@ -37,6 +37,11 @@ public class Tile
 			this.goLeft = goLeft;
 		}
 	}
+
+	public boolean goUp(){return tileType.goUp;}
+	public boolean goRight(){return tileType.goRight;}
+	public boolean goDown(){return tileType.goDown;}
+	public boolean goLeft(){return tileType.goLeft;}
 	
 	public Tile(TILETYPE tileType)
 	{

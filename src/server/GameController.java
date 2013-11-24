@@ -9,6 +9,7 @@ public class GameController implements IGameController
 	public GameController()
 	{
 		model = new Model();
+		buildBoard();
 	}
 
 	@Override
@@ -44,29 +45,45 @@ public class GameController implements IGameController
 	@Override
 	public void moveUp()
 	{
-		if (model.getActivePlayer().getPositionY() - 1 >= 0)
+		Player activePlayer = model.getActivePlayer();
+		
+		if (activePlayer.getPositionY() - 1 >= 0)
 		{
-			model.getActivePlayer().moveUp();
+			if (activePlayer.getCurrentTile().goUp() && 
+					model.getTile(activePlayer.getPositionX(),  activePlayer.getPositionY()).goDown())
+			{
+				activePlayer.moveUp();
+			}
 		}
-		
-		
 	}
 
 	@Override
 	public void moveDown()
 	{
-		if (model.getActivePlayer().getPositionY() + 1 <= 6)
+		Player activePlayer = model.getActivePlayer();
+		
+		if (activePlayer.getPositionY() + 1 <= 6)
 		{
-			model.getActivePlayer().moveDown();
+			if (activePlayer.getCurrentTile().goDown() && 
+					model.getTile(activePlayer.getPositionX(),  activePlayer.getPositionY()).goUp())
+			{
+				activePlayer.moveDown();
+			}
 		}
 	}
 
 	@Override
 	public void moveLeft()
 	{
-		if (model.getActivePlayer().getPositionX() - 1 >= 0)
+		Player activePlayer = model.getActivePlayer();
+		
+		if (activePlayer.getPositionX() - 1 >= 0)
 		{
-			model.getActivePlayer().moveLeft();
+			if (activePlayer.getCurrentTile().goLeft() && 
+					model.getTile(activePlayer.getPositionX(),  activePlayer.getPositionY()).goRight())
+			{
+				activePlayer.moveLeft();
+			}
 		}
 		
 	}
@@ -74,9 +91,15 @@ public class GameController implements IGameController
 	@Override
 	public void moveRight()
 	{
-		if (model.getActivePlayer().getPositionX() + 1 <= 6)
+		Player activePlayer = model.getActivePlayer();
+		
+		if (activePlayer.getPositionX() + 1 <= 6)
 		{
-			model.getActivePlayer().moveRight();
+			if (activePlayer.getCurrentTile().goRight() && 
+					model.getTile(activePlayer.getPositionX(),  activePlayer.getPositionY()).goLeft())
+			{
+				activePlayer.moveRight();
+			}
 		}
 		
 	}
