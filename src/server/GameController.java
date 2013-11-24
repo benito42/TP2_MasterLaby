@@ -113,7 +113,11 @@ public class GameController implements IGameController
 	{
 		model.buildBoard();
 	}
-
 	
+	@Override
+	public void shiftTiles(int index, Direction direction)
+	{
+		this.model.shiftTiles(index, direction);
+	}
 	
 }

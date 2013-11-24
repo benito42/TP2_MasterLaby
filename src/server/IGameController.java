@@ -16,4 +16,5 @@ public interface IGameController
 	public void moveLeft();
 	public void moveRight();
 	
+	public void shiftTiles(int index, Direction direction);
 }

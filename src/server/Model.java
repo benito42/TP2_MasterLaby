@@ -1,5 +1,6 @@
 package server;
 
+import java.util.List;
 import java.util.LinkedList;
 
 import server.Tile.TILETYPE;
@@ -246,5 +247,27 @@ public class Model
 		
 	}
 
-
+	public void shiftTiles(int index, Direction direction)
+	{
+		Tile tempTile;
+		
+		switch(direction)
+		{
+		case LEFT:
+				
+			break;
+		case DOWN:
+			
+			break;
+		case RIGHT:
+			
+			break;
+		case UP:
+			
+			break;
+		default:
+			
+			break;
+		}
+	}
 }
