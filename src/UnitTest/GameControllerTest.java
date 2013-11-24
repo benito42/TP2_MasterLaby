@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import server.Direction;
 import server.GameController;
 import server.Model;
 import server.Player;
@@ -220,5 +221,19 @@ ur.ul.url.ud.url.ur.ul
 		assertEquals(controller.getModel().getTile(0, 0).getTileType(), TILETYPE.down_right);
 		assertEquals(controller.getModel().getTile(1, 0).getTileType(), TILETYPE.down_left);
 	}
-
+	
+	@Test
+	public void shiftTilesRightTest()
+	{
+		Tile tempTile = controller.getModel().getTile(1, 1);
+		Tile oldNextTile = controller.getModel().getNextTile();
+		Tile newNextTile = controller.getModel().getTile(6, 1);
+		
+		controller.shiftTiles(1, Direction.RIGHT);
+		
+		assertEquals(controller.getModel().getTile(0,1), oldNextTile);
+		assertEquals(controller.getModel().getTile(2,1), tempTile);
+		assertEquals(controller.getModel().getNextTile(), newNextTile);
+		//Checker aussi les positions x et y
+	}
 }
