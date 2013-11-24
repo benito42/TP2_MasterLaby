@@ -23,11 +23,11 @@ public class GameControllerTest
 	@Before
 	public void setUp() throws Exception
 	{
-		p1 = new Player(0, 0);
-		p2 = new Player(6, 0);
-		p3 = new Player(6, 6);
-		p4 = new Player(0, 6);
 		controller = new GameController();
+		p1 = new Player(controller.getModel().getTile(0,  0));
+		p2 = new Player(controller.getModel().getTile(6,  0));
+		p3 = new Player(controller.getModel().getTile(6,  6));
+		p4 = new Player(controller.getModel().getTile(0,  6));
 		
 	}
 	
@@ -81,19 +81,32 @@ public class GameControllerTest
 	@Test
 	public void movingTestP1()
 	{
+		/*
+rd.dl.rdl.ud.rdl.rd.dl
+ur.ud.rd.dl.ud.rl.rl
+urd.rl.urd.rl.rdl.dl.udl
+rl.rd.ud.ul.ud.ul.rl
+urd.ur.url.rl.udl.rl.udl
+rd.rl.ud.ur.ul.ud.dl
+ur.ul.url.ud.url.ur.ul
+		 */
 		controller.addPlayer(p1); //starts at (0, 0)
 		
 		controller.moveUp();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 0);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(),
+				controller.getModel().getTile(0,  0));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 1);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  1));
 		
 		controller.moveLeft();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 0);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  1));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 1);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  1));
 	}
 
 	@Test
@@ -102,19 +115,24 @@ public class GameControllerTest
 		controller.addPlayer(p2); //starts at (6, 0)
 		
 		controller.moveUp();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 0);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  0));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 1);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  1));
 		
 		controller.moveLeft();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 5);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(5,  1));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  1));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  1));
 	}
 	
 	@Test
@@ -123,22 +141,28 @@ public class GameControllerTest
 		controller.addPlayer(p3); //starts at (6, 6)
 		
 		controller.moveUp();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 5);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  5));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  6));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  6));
 		
 		controller.moveLeft();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 5);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(5,  6));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  6));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(6,  6));
 	}
 	
 	@Test
@@ -147,19 +171,24 @@ public class GameControllerTest
 		controller.addPlayer(p4); //starts at (0, 6)
 		
 		controller.moveUp();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 5);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  5));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(),
+				controller.getModel().getTile(0,  6));
 		
 		controller.moveDown();
-		assertEquals(controller.getModel().getActivePlayer().getPositionY(), 6);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  6));
 		
 		controller.moveLeft();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 0);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(0,  6));
 		
 		controller.moveRight();
-		assertEquals(controller.getModel().getActivePlayer().getPositionX(), 1);
+		assertEquals(controller.getModel().getActivePlayer().getCurrentTile(), 
+				controller.getModel().getTile(1,  6));
 	}
 	
 	@Test

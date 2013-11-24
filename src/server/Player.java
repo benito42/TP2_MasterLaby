@@ -6,23 +6,19 @@ public class Player
 	private Tile currentTile;
 	private String name = "DEFAULT";
 	private String avatar = "DEFAULT";
-	private int positionX;
-	private int positionY;
 	private Objective[] objectiveList = new Objective[3];
 
 
-	public Player(int positionX, int positionY)
+	public Player(Tile currentTile)
 	{
-		this.positionX = positionX;
-		this.positionY = positionY;
+		this.currentTile = currentTile;
 	}
 	
-	public Player(String name, String avatar, int positionX, int positionY)
+	public Player(String name, String avatar, Tile currentTile)
 	{
 		this.name = name;
 		this.avatar = avatar;
-		this.positionX = positionX;
-		this.positionY = positionY;
+		this.currentTile = currentTile;
 	}
 	
 	public Objective[] getObjectiveList() {
@@ -47,44 +43,6 @@ public class Player
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-	}
-
-	public int getPositionX() {
-		return positionX;
-	}
-
-	public void setPositionX(int positionX) {
-		this.positionX = positionX;
-	}
-
-	public int getPositionY() {
-		return positionY;
-	}
-
-	public void setPositionY(int positionY) {
-		this.positionY = positionY;
-	}
-	
-	public void moveUp()
-	{
-		positionY--;
-	}
-
-	public void moveDown()
-	{
-		positionY++;
-		
-	}
-
-	public void moveLeft()
-	{
-		positionX--;
-		
-	}
-
-	public void moveRight()
-	{
-		positionX++;
 	}
 
 	public Tile getCurrentTile() {

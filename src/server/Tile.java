@@ -7,9 +7,11 @@ import server.Tile.TILETYPE;
 
 public class Tile
 {
-	private LinkedList<Player> playerList;
 	private Objective objective;
 	private TILETYPE tileType;
+	
+	private int positionX;
+	private int positionY;
 	
 	public enum TILETYPE
 	{
@@ -43,8 +45,10 @@ public class Tile
 	public boolean goDown(){return tileType.goDown;}
 	public boolean goLeft(){return tileType.goLeft;}
 	
-	public Tile(TILETYPE tileType)
+	public Tile(TILETYPE tileType, int positionX, int positionY)
 	{
+		this.positionX = positionX;
+		this.positionY = positionY;
 		this.tileType = tileType;
 	}
 
@@ -52,24 +56,20 @@ public class Tile
 		return tileType;
 	}
 
-
-	public void setPlayerList(LinkedList<Player> playerList) {
-		this.playerList = playerList;
-	}
-
-	public LinkedList<Player> getPlayerList()
-	{
-		return playerList;
-	}
-
-	public void addPlayer(Player player)
-	{
-		playerList.add(player);
+	public int getPositionX() {
+		return positionX;
 	}
 	
-	public void removePlayer(Player player)
-	{
-		playerList.remove(player);
+	public void setPositionX(int positionX) {
+		this.positionX = positionX;
+	}
+	
+	public int getPositionY() {
+		return positionY;
+	}
+	
+	public void setPositionY(int positionY) {
+		this.positionY = positionY;
 	}
 	
 	public Objective getObjective() {
