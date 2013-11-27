@@ -1,5 +1,7 @@
 package client;
 
+import server.GameController;
+
 public class MenuController implements IMenuController
 {
 	public static void main(String[] args) 
@@ -17,5 +19,11 @@ public class MenuController implements IMenuController
 	public void showRules() 
 	{
 		new RulesView();
+	}
+
+	@Override
+	public void startGame() 
+	{
+		new GameController();
 	}
 }
