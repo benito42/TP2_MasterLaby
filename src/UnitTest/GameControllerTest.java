@@ -236,4 +236,49 @@ ur.ul.url.ud.url.ur.ul
 		assertEquals(controller.getModel().getNextTile(), newNextTile);
 		//Checker aussi les positions x et y
 	}
+	
+	@Test
+	public void shiftTilesLeftTest()
+	{
+		Tile tempTile = controller.getModel().getTile(1, 1);
+		Tile oldNextTile = controller.getModel().getNextTile();
+		Tile newNextTile = controller.getModel().getTile(0, 1);
+		
+		controller.shiftTiles(1, Direction.LEFT);
+		
+		assertEquals(controller.getModel().getTile(6,1), oldNextTile);
+		assertEquals(controller.getModel().getTile(0,1), tempTile);
+		assertEquals(controller.getModel().getNextTile(), newNextTile);
+		//Checker aussi les positions x et y
+	}
+	
+	@Test
+	public void shiftTilesUpTest()
+	{
+		Tile tempTile = controller.getModel().getTile(1, 1);
+		Tile oldNextTile = controller.getModel().getNextTile();
+		Tile newNextTile = controller.getModel().getTile(1, 0);
+		
+		controller.shiftTiles(1, Direction.UP);
+		
+		assertEquals(controller.getModel().getTile(1,6), oldNextTile);
+		assertEquals(controller.getModel().getTile(1,0), tempTile);
+		assertEquals(controller.getModel().getNextTile(), newNextTile);
+		//Checker aussi les positions x et y
+	}
+	
+	@Test
+	public void shiftTilesDownTest()
+	{
+		Tile tempTile = controller.getModel().getTile(1, 1);
+		Tile oldNextTile = controller.getModel().getNextTile();
+		Tile newNextTile = controller.getModel().getTile(1, 6);
+		
+		controller.shiftTiles(1, Direction.DOWN);
+		
+		assertEquals(controller.getModel().getTile(1,0), oldNextTile);
+		assertEquals(controller.getModel().getTile(1,2), tempTile);
+		assertEquals(controller.getModel().getNextTile(), newNextTile);
+		//Checker aussi les positions x et y
+	}
 }

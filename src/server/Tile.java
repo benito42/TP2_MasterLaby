@@ -1,10 +1,5 @@
 package server;
 
-import java.util.LinkedList;
-
-import server.Tile.TILETYPE;
-
-
 public class Tile
 {
 	private Objective objective;

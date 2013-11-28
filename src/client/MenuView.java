@@ -15,8 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import server.GameController;
-
 public class MenuView extends JFrame implements ActionListener, IMenuView
 {
 	private static final long serialVersionUID = 570336988907402917L;

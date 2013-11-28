@@ -1,6 +1,5 @@
 package server;
 
-import java.util.List;
 import java.util.LinkedList;
 
 import server.Tile.TILETYPE;
@@ -267,14 +266,46 @@ public class Model
 				y = index;
 				x = 0;
 				
+				tempTile = this.getTile(x, y);
+				tempTile.setPositionX(-1);
+				tempTile.setPositionY(-1);
+				
+				for(x = 0; x < 6; x++)
+				{
+					this.board[x][y] = this.board[x + 1][y];
+					this.board[x][y].setPositionX(x);
+				}
+				
+				this.nextTile.setPositionX(x);
+				this.nextTile.setPositionY(y);
+				this.board[x][y] = this.nextTile;
+				this.nextTile = tempTile;
+				
 			break;
 		case DOWN:
 				y = 6;
 				x = index;
+				
+				tempTile = this.getTile(x, y);
+				tempTile.setPositionX(-1);
+				tempTile.setPositionY(-1);
+				
+				for(y = 6; y >= 1; y--)
+				{
+					this.board[x][y] = this.board[x][y - 1];
+					this.board[x][y].setPositionX(x);
+				}
+				
+				this.nextTile.setPositionX(x);
+				this.nextTile.setPositionY(y);
+				this.board[x][y] = this.nextTile;
+				this.nextTile = tempTile;
+				
 			break;
 		case RIGHT:
 				y = index;
 				x = 6;
+				
 				tempTile = this.getTile(x, y);
 				tempTile.setPositionX(-1);
 				tempTile.setPositionY(-1);
@@ -285,7 +316,7 @@ public class Model
 					this.board[x][y].setPositionX(x);
 				}
 				
-				this.nextTile.setPositionX(0);
+				this.nextTile.setPositionX(x);
 				this.nextTile.setPositionY(y);
 				this.board[x][y] = this.nextTile;
 				this.nextTile = tempTile;
@@ -294,6 +325,22 @@ public class Model
 		case UP:
 				y = 0;
 				x = index;
+				
+				tempTile = this.getTile(x, y);
+				tempTile.setPositionX(-1);
+				tempTile.setPositionY(-1);
+				
+				for(y = 0; y < 6; y++)
+				{
+					this.board[x][y] = this.board[x][y + 1];
+					this.board[x][y].setPositionX(x);
+				}
+				
+				this.nextTile.setPositionX(x);
+				this.nextTile.setPositionY(y);
+				this.board[x][y] = this.nextTile;
+				this.nextTile = tempTile;
+				
 			break;
 		default:
 				y = -1;
