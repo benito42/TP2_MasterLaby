@@ -24,8 +24,8 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private static final long serialVersionUID = 1L;
 	private IGameController controller;
 	
-	private JPanel mainPanel = new JPanel();
-	private JPanel boardPanel = new JPanel(new GridLayout());
+	//private JPanel mainPanel = new JPanel();
+	private JPanel boardPanel = new JPanel();
 	private JPanel tilePanel = new JPanel();
 	
 	
@@ -44,42 +44,106 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		
 	}
 	
+	private void buildArrowLayout(String arrowType)
+	{
+		switch (arrowType)
+		{
+		case "top":
+			topArrowPanel.setLayout(new GridLayout(0, 3));
+			
+			for (int i = 0; i < 3; i++)
+			{
+				URL input = this.getClass().getResource("/img/arrow_down.jpg");
+				ImageIcon img = new ImageIcon(input);
+					
+				topArrowPanel.add(new JLabel(img));
+			}
+			break;
+			
+		case "right":
+			rightArrowPanel.setLayout(new GridLayout(0, 1));
+			
+			for (int j = 0; j < 3; j++)
+			{
+				URL input = this.getClass().getResource("/img/arrow_left.jpg");
+				ImageIcon img = new ImageIcon(input);
+					
+				rightArrowPanel.add(new JLabel(img));
+			}
+			break;
+			
+		case "bottom":
+			bottomArrowPanel.setLayout(new GridLayout(0, 3));
+			
+			for (int k = 0; k < 3; k++)
+			{
+				URL input = this.getClass().getResource("/img/arrow_up.jpg");
+				ImageIcon img = new ImageIcon(input);
+					
+				bottomArrowPanel.add(new JLabel(img));
+			}
+			break;
+			
+		case "left":
+			leftArrowPanel.setLayout(new GridLayout(0, 1));
+			
+			for (int l = 0; l < 3; l++)
+			{
+				URL input = this.getClass().getResource("/img/arrow_right.jpg");
+				ImageIcon img = new ImageIcon(input);
+					
+				leftArrowPanel.add(new JLabel(img));
+			}
+			break;
+		}
+			
+	}
+	
 	private void setLayout()
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
         this.setFocusable(true);
         
-        this.buildBoardBagLayout();
-        this.buildObjectivesLayout();
+        this.buildBoardLayout();
         
-        mainPanel.add(boardPanel, BorderLayout.WEST);
+        this.add(topArrowPanel, BorderLayout.NORTH);
+        this.add(rightArrowPanel, BorderLayout.EAST);
+        this.add(bottomArrowPanel, BorderLayout.SOUTH);
+        this.add(leftArrowPanel, BorderLayout.WEST);
+        this.add(tilePanel, BorderLayout.CENTER);
         
-        this.add(mainPanel);
+        //this.buildObjectivesLayout();
         
+        //mainPanel.add(boardPanel, BorderLayout.WEST);
+        
+        //this.add(mainPanel);
         this.pack();
+        this.repaint();
 	}
 	
-	private void buildBoardBagLayout()
+	private void buildBoardLayout()
 	{
 		this.buildTileGridLayout();
 		
-		boardPanel.add(tilePanel);
-		/*
-		boardPanel.setLayout(new GridLayout(3, 1));
-		
-		//boardPanel.add(new JLabel("TopLeft"));
-		boardPanel.add(new JLabel("TopMid"), BorderLayout.NORTH);
-		//boardPanel.add(new JLabel("TopRight"));
-		//boardPanel.add(new JLabel("MidLeft"), BorderLayout.WEST);
-		
+
+        this.buildArrowLayout("top");
+        this.buildArrowLayout("right");
+        this.buildArrowLayout("bottom");
+        this.buildArrowLayout("left");
+        /*
+		boardPanel.setLayout(new GridLayout(0, 3));
+		boardPanel.add(new JLabel("TopLeft"));
+		boardPanel.add(new JLabel("TopMid"));
+		boardPanel.add(new JLabel("TopRight"));
+		boardPanel.add(new JLabel("MidLeft"));
 		boardPanel.add(tilePanel, BorderLayout.CENTER);
 
-		//boardPanel.add(new JLabel("MidRight"), BorderLayout.EAST);
-		//boardPanel.add(new JLabel("BottomLeft"));
-		boardPanel.add(new JLabel("BottomMid"), BorderLayout.SOUTH);
-		//boardPanel.add(new JLabel("BottomRight"));
-		*/
+		boardPanel.add(new JLabel("MidRight"));
+		boardPanel.add(new JLabel("BottomLeft"));
+		boardPanel.add(new JLabel("BottomMid"));
+		boardPanel.add(new JLabel("BottomRight"));*/
+		
 	
 		
 		/*
@@ -126,8 +190,8 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		c.gridx = 1;       //aligned with button 2
 		c.gridwidth = 2;   //2 columns wide
 		c.gridy = 2;       //third row
-		boardPanel.add(button, c);*/
-		
+		boardPanel.add(button, c);
+		*/
 	}
 	
 	private void buildTileGridLayout()
