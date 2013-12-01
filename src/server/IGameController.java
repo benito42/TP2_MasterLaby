@@ -1,9 +1,11 @@
 package server;
 
+import client.IGameView;
+
 
 public interface IGameController
 {
-
+	public void addView(IGameView newView);
 	
 	public void addPlayer(Player player);
 	public void removePlayer();

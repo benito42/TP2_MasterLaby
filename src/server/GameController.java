@@ -12,53 +12,61 @@ public class GameController implements IGameController
 	
 	public GameController()
 	{
-		model = new Model();
-		buildBoard();
-		gameView = new GameView(this);
-		gameView.showGameView();
+		this.model = new Model();
+		this.buildBoard();
+		this.gameView = new GameView(this);
+		this.model.addView(gameView);
+		this.gameView.showGameView();
 	}
 
 	@Override
 	public void addPlayer(Player player)
 	{
-		model.addPLayer(player);
+		this.model.addPlayer(player);
 		
 	}
 
 	@Override
 	public void removePlayer()
 	{
-		model.removePLayer();
+		this.model.removePlayer();
 		
-		if (model.getNbrPlayer() < 2)
+		if (this.model.getNbrPlayer() < 2)
 		{
-			gameOver();
+			this.gameOver();
 		}
 		
 	}
 
 	public void nextPlayer()
 	{
-		model.nextPlayer();
+		this.model.nextPlayer();
+	}
+	
+	@Override
+	public void addView(IGameView newView)
+	{
+		this.model.addView(newView);
+		
 	}
 
 	public void gameOver()
 	{
-		model.setGameOver(true);
+		this.model.setGameOver(true);
 		System.out.println("fin de partie");
 	}
 
 	@Override
 	public void moveUp()
 	{
-		Tile activePlayerTile = model.getActivePlayer().getCurrentTile();
+		Tile activePlayerTile = this.model.getActivePlayer().getCurrentTile();
 		
 		if (activePlayerTile.getPositionY() - 1 >= 0)
 		{
 			if (activePlayerTile.goUp() && 
-					model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1).goDown())
+					this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1).goDown())
 			{
-				model.getActivePlayer().setCurrentTile(model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1));
+				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1));
 			}
 		}
 	}
@@ -66,14 +74,14 @@ public class GameController implements IGameController
 	@Override
 	public void moveDown()
 	{
-		Tile activePlayerTile = model.getActivePlayer().getCurrentTile();
+		Tile activePlayerTile = this.model.getActivePlayer().getCurrentTile();
 		
 		if (activePlayerTile.getPositionY() + 1 <= 6)
 		{
 			if (activePlayerTile.goDown() && 
-					model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1).goUp())
+					this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1).goUp())
 			{
-				model.getActivePlayer().setCurrentTile(model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1));
+				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1));
 			}
 		}
 	}
@@ -81,14 +89,14 @@ public class GameController implements IGameController
 	@Override
 	public void moveLeft()
 	{
-		Tile activePlayerTile = model.getActivePlayer().getCurrentTile();
+		Tile activePlayerTile = this.model.getActivePlayer().getCurrentTile();
 		
 		if (activePlayerTile.getPositionX() - 1 >= 0)
 		{
 			if (activePlayerTile.goLeft() && 
-					model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()).goRight())
+					this.model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()).goRight())
 			{
-				model.getActivePlayer().setCurrentTile(model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()));
+				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()));
 			}
 		}
 		
@@ -97,14 +105,14 @@ public class GameController implements IGameController
 	@Override
 	public void moveRight()
 	{
-		Tile activePlayerTile = model.getActivePlayer().getCurrentTile();
+		Tile activePlayerTile = this.model.getActivePlayer().getCurrentTile();
 		
 		if (activePlayerTile.getPositionX() + 1 <= 6)
 		{
 			if (activePlayerTile.goRight() && 
-					model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()).goLeft())
+					this.model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()).goLeft())
 			{
-				model.getActivePlayer().setCurrentTile(model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()));
+				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()));
 			}
 		}
 		
@@ -112,12 +120,12 @@ public class GameController implements IGameController
 
 	public Model getModel()
 	{
-		return model;
+		return this.model;
 	}
 
 	public void buildBoard()
 	{
-		model.buildBoard();
+		this.model.buildBoard();
 	}
 	
 	@Override
