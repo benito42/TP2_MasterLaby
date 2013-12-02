@@ -358,6 +358,7 @@ public class Model
 		}
 		
 		this.updateBoardViews();
+		this.updateNextTileViews();
 	}
 	
 	public void addView(IGameView newView)
@@ -370,6 +371,14 @@ public class Model
 		for(IGameView view : this.viewsList)
 		{
 			view.updateBoard(this.board);
+		}
+	}
+	
+	public void updateNextTileViews()
+	{
+		for(IGameView view : this.viewsList)
+		{
+			view.updateNextTile(this.nextTile);
 		}
 	}
 }

@@ -59,6 +59,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private JButton btnDownRightArrow = new JButton();
 	
 	private JLabel[][] board = new JLabel[7][7];
+	private JLabel nextTile = new JLabel();
 	
 	public GameView(IGameController controller)
 	{
@@ -78,8 +79,10 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		{
 		case UP:
 			topArrowPanel.setLayout(new GridLayout(0, 9));
-
-			for (int k = 0; k < 9; k++)
+			
+			topArrowPanel.add(this.nextTile);
+			
+			for (int k = 1; k < 9; k++)
 			{
 				URL input = this.getClass().getResource("/img/arrow_down.jpg");
 				ImageIcon img = new ImageIcon(input);
@@ -247,11 +250,11 @@ public class GameView extends JFrame implements ActionListener, IGameView
         
         this.buildBoardLayout();
         
-        this.add(topArrowPanel, BorderLayout.NORTH);
-        this.add(rightArrowPanel, BorderLayout.EAST);
-        this.add(bottomArrowPanel, BorderLayout.SOUTH);
-        this.add(leftArrowPanel, BorderLayout.WEST);
-        this.add(tilePanel, BorderLayout.CENTER);
+        this.add(this.topArrowPanel, BorderLayout.NORTH);
+        this.add(this.rightArrowPanel, BorderLayout.EAST);
+        this.add(this.bottomArrowPanel, BorderLayout.SOUTH);
+        this.add(this.leftArrowPanel, BorderLayout.WEST);
+        this.add(this.tilePanel, BorderLayout.CENTER);
         
         //this.buildObjectivesLayout();
         
@@ -336,7 +339,12 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private void buildTileGridLayout()
 	{
-		this.setTileGridLayoutFromTable(controller.getModel().getBoard());
+		this.setTileGridLayoutFromTable(this.controller.getModel().getBoard());
+		
+		URL input = this.getClass().getResource(this.controller.getModel().getNextTile().getPath());
+		ImageIcon img = new ImageIcon(input);
+		
+		this.nextTile.setIcon(img);
 	}
 	
 	private void setTileGridLayoutFromTable(Tile[][] board)
@@ -377,6 +385,15 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				this.board[j][i].setIcon(img);
 			}
 		}
+	}
+	
+	@Override
+	public void updateNextTile(Tile nextTile) 
+	{
+		URL input = this.getClass().getResource(nextTile.getPath());
+		ImageIcon img = new ImageIcon(input);
+		
+		this.nextTile.setIcon(img);
 	}
 	
 	@Override
