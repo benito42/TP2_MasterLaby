@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import server.Avatar;
 import server.Direction;
 import server.GameController;
 import server.Model;
@@ -25,10 +26,10 @@ public class GameControllerTest
 	public void setUp() throws Exception
 	{
 		controller = new GameController();
-		p1 = new Player(controller.getModel().getTile(0,  0));
-		p2 = new Player(controller.getModel().getTile(6,  0));
-		p3 = new Player(controller.getModel().getTile(6,  6));
-		p4 = new Player(controller.getModel().getTile(0,  6));
+		p1 = new Player("Bob", Avatar.commando, controller.getModel().getTile(0,  0));
+		p2 = new Player("Ginette", Avatar.darkVador, controller.getModel().getTile(6,  0));
+		p3 = new Player("Henry", Avatar.ninja, controller.getModel().getTile(6,  6));
+		p4 = new Player("Steve", Avatar.pirate, controller.getModel().getTile(0,  6));
 		
 	}
 	
@@ -280,5 +281,18 @@ ur.ul.url.ud.url.ur.ul
 		assertEquals(controller.getModel().getTile(1,2), tempTile);
 		assertEquals(controller.getModel().getNextTile(), newNextTile);
 		//Checker aussi les positions x et y
+	}
+	
+	@Test
+	public void buildBoardWithPlayerTest()
+	{
+		controller.getModel().addPlayer(p1);
+		
+		controller.buildBoard();
+		assertEquals(controller.getModel().getTile(0, 0).getPlayerList().get(0), p1);
+		assertEquals(controller.getModel().getTile(6, 2).getObjective(), p1.getObjectiveList()[0]);
+		assertEquals(controller.getModel().getTile(4, 4).getObjective(), p1.getObjectiveList()[1]);
+		assertEquals(controller.getModel().getTile(2, 6).getObjective(), p1.getObjectiveList()[2]);
+		
 	}
 }

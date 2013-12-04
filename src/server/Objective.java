@@ -2,47 +2,22 @@ package server;
 
 public class Objective
 {
-	private Tile currentTile;
-	private String name;
-	private int positionX;
-	private int positionY;
+	private String path;
 	private boolean objectiveReached = false;
 	
-	public Objective()
+	public Objective(String path)
 	{
-		
+		this.path = path;
 	}
 	
-	public String getName() {
-		return name;
+	public String getPath() {
+		return path;
 	}
 
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPath(String path) {
+		this.path = path;
 	}
-
-
-	public int getPositionX() {
-		return positionX;
-	}
-
-
-	public void setPositionX(int positionX) {
-		this.positionX = positionX;
-	}
-
-
-	public int getPositionY() {
-		return positionY;
-	}
-
-
-	public void setPositionY(int positionY) {
-		this.positionY = positionY;
-	}
-
-
 	public boolean isObjectiveReached() {
 		return objectiveReached;
 	}
@@ -50,14 +25,6 @@ public class Objective
 
 	public void setObjectiveReached(boolean objectiveReached) {
 		this.objectiveReached = objectiveReached;
-	}
-
-	public Tile getCurrentTile() {
-		return currentTile;
-	}
-
-	public void setCurrentTile(Tile currentTile) {
-		this.currentTile = currentTile;
 	}
 	
 

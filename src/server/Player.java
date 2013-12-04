@@ -5,7 +5,7 @@ public class Player
 {
 	private Tile currentTile;
 	private String name = "DEFAULT";
-	private String avatar = "DEFAULT";
+	private Avatar avatar = Avatar.commando;
 	private Objective[] objectiveList = new Objective[3];
 
 
@@ -14,19 +14,19 @@ public class Player
 		this.currentTile = currentTile;
 	}
 	
-	public Player(String name, String avatar, Tile currentTile)
+	public Player(String name, Avatar avatar, Tile currentTile)
 	{
 		this.name = name;
 		this.avatar = avatar;
 		this.currentTile = currentTile;
+		objectiveList[0] = new Objective(avatar.getObj1());
+		objectiveList[1] = new Objective(avatar.getObj2());
+		objectiveList[2] = new Objective(avatar.getObj3());
+		
 	}
 	
 	public Objective[] getObjectiveList() {
 		return objectiveList;
-	}
-
-	public void setObjectiveList(Objective[] objectiveList) {
-		this.objectiveList = objectiveList;
 	}
 
 	public String getName() {
@@ -37,11 +37,11 @@ public class Player
 		this.name = name;
 	}
 
-	public String getAvatar() {
+	public Avatar getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
+	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
 	}
 

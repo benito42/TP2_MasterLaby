@@ -1,12 +1,14 @@
 package server;
 
+import java.util.LinkedList;
+
 public class Tile
 {
 	private Objective objective;
 	private TILETYPE tileType;
-	
 	private int positionX;
 	private int positionY;
+	public LinkedList<Player> playerList = new LinkedList<Player>();
 	
 	public enum TILETYPE
 	{
@@ -48,6 +50,7 @@ public class Tile
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.tileType = tileType;
+		this.objective = null;
 	}
 
 	public TILETYPE getTileType() {
@@ -70,6 +73,13 @@ public class Tile
 		this.positionY = positionY;
 	}
 	
+	public LinkedList<Player> getPlayerList() {
+		return playerList;
+	}
+	public void addPlayer(Player player) {
+		this.playerList.add(player);
+	}
+
 	public Objective getObjective() {
 		return objective;
 	}

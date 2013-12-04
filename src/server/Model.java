@@ -40,7 +40,7 @@ public class Model
 	public void addPlayer(Player player)
 	{
 		this.playerList.add(player);
-		this.activePlayers = playerList.size() - 1;
+		//this.activePlayers = playerList.size() - 1;
 	}
 	
 	public void removePlayer()
@@ -79,7 +79,7 @@ public class Model
 	public void buildBoard()
 	{
 		this.buildTiles();
-		//*buildGameForPlayersAndObjectives();
+		this.buildGameForPlayersAndObjectives();
 	}
 	
 	private void buildTiles()
@@ -253,9 +253,41 @@ public class Model
 		return this.board[xPosition][yPosition];
 	}
 	
-	private void buildPlayersAndObjectives(Player[] players)
+	private void buildGameForPlayersAndObjectives()
 	{
-		
+		for (int i = 0; i < playerList.size(); i ++)
+		{
+			board[playerList.get(i).getCurrentTile().getPositionX()]
+					[playerList.get(i).getCurrentTile().getPositionY()].addPlayer(playerList.get(i));
+			/*Tile tempTile = board[playerList.get(i).getCurrentTile().getPositionX()][playerList.get(i).getCurrentTile().getPositionY()];
+			Player tempPlayer = playerList.get(i);
+			tempTile.addPlayer(tempPlayer);*/
+			
+			switch (i)
+			{
+			case 0:
+				board[6][2].setObjective(playerList.get(i).getObjectiveList()[0]);
+				board[4][4].setObjective(playerList.get(i).getObjectiveList()[1]);
+				board[2][6].setObjective(playerList.get(i).getObjectiveList()[2]);
+				break;
+			case 1:
+				board[4][6].setObjective(playerList.get(i).getObjectiveList()[0]);
+				board[2][4].setObjective(playerList.get(i).getObjectiveList()[1]);
+				board[0][2].setObjective(playerList.get(i).getObjectiveList()[2]);
+				break;
+			case 2:
+				board[0][4].setObjective(playerList.get(i).getObjectiveList()[0]);
+				board[2][2].setObjective(playerList.get(i).getObjectiveList()[1]);
+				board[4][0].setObjective(playerList.get(i).getObjectiveList()[2]);
+				break;
+			case 3:
+				board[2][0].setObjective(playerList.get(i).getObjectiveList()[0]);
+				board[4][2].setObjective(playerList.get(i).getObjectiveList()[1]);
+				board[6][4].setObjective(playerList.get(i).getObjectiveList()[2]);
+				break;
+			
+			}
+		}
 	}
 	
 	public Tile getNextTile()

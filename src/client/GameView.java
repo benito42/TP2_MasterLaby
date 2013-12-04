@@ -391,11 +391,6 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		}
 	}
 	
-	private void buildObjectivesLayout()
-	{
-		
-	}
-	
 	private void setArrowButtonsEnabled(boolean isEnabled)
 	{
 		for(JButton button : this.listArrowButtons)
