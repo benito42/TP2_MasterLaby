@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -16,10 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import server.Direction;
 import server.IGameController;
@@ -42,6 +39,8 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private JPanel bottomArrowPanel = new JPanel();
 	private JPanel leftArrowPanel = new JPanel();
 	
+	private LinkedList<JButton> listArrowButtons = new LinkedList<JButton>();
+	
 	private JButton btnTopLeftArrow = new JButton();
 	private JButton btnTopCenterArrow = new JButton();
 	private JButton btnTopRightArrow = new JButton();
@@ -61,16 +60,35 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private JLabel[][] board = new JLabel[7][7];
 	private JLabel nextTile = new JLabel();
 	
+	private JButton btnNextTurn = new JButton("Fin de tour");
+	
 	public GameView(IGameController controller)
 	{
 		this.controller = controller;
+		
+		this.setArrowButtons();
 		this.setLayout();
 		
+		this.btnNextTurn.setEnabled(false);
 	}
 	
 	private void setArrowButtons()
 	{
+		this.listArrowButtons.add(this.btnDownRightArrow);
+		this.listArrowButtons.add(this.btnDownLeftArrow);
+		this.listArrowButtons.add(this.btnDownCenterArrow);
 		
+		this.listArrowButtons.add(this.btnTopRightArrow);
+		this.listArrowButtons.add(this.btnTopLeftArrow);
+		this.listArrowButtons.add(this.btnTopCenterArrow);
+		
+		this.listArrowButtons.add(this.btnRightUpArrow);
+		this.listArrowButtons.add(this.btnRightCenterArrow);
+		this.listArrowButtons.add(this.btnRightDownArrow);
+		
+		this.listArrowButtons.add(this.btnLeftUpArrow);
+		this.listArrowButtons.add(this.btnLeftCenterArrow);
+		this.listArrowButtons.add(this.btnLeftDownArrow);
 	}
 	
 	private void buildArrowLayout(Direction arrowType)
@@ -120,7 +138,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		case DOWN:
 			bottomArrowPanel.setLayout(new GridLayout(0, 9));
 			
-			for (int k = 0; k < 9; k++)
+			for (int k = 0; k < 8; k++)
 			{
 				URL input = this.getClass().getResource("/img/arrow_up.jpg");
 				ImageIcon img = new ImageIcon(input);
@@ -134,6 +152,12 @@ public class GameView extends JFrame implements ActionListener, IGameView
 					bottomArrowPanel.add(new JLabel());
 				}
 			}
+			
+			this.btnNextTurn.addActionListener(this);
+			this.btnNextTurn.setSize(this.btnDownCenterArrow.getWidth(), this.btnDownCenterArrow.getHeight());
+			this.btnNextTurn.setBorder(BorderFactory.createEmptyBorder());
+			
+			bottomArrowPanel.add(this.btnNextTurn);
 			break;
 			
 		case LEFT:
@@ -372,6 +396,14 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		
 	}
 	
+	private void setArrowButtonsEnabled(boolean isEnabled)
+	{
+		for(JButton button : this.listArrowButtons)
+		{
+			button.setEnabled(isEnabled);
+		}
+	}
+	
 	@Override
 	public void updateBoard(Tile[][] newBoard) 
 	{
@@ -405,56 +437,69 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	@Override
 	public void actionPerformed(ActionEvent ae)
 	{
-		if(ae.getSource() == this.btnDownRightArrow)
+		if(this.listArrowButtons.contains(ae.getSource()))
 		{
-			this.controller.shiftTiles(5, Direction.UP);
+			this.btnNextTurn.setEnabled(true);
+			this.setArrowButtonsEnabled(false);
+			
+			if(ae.getSource() == this.btnDownRightArrow)
+			{
+				this.controller.shiftTiles(5, Direction.UP);
+			}
+			else if(ae.getSource() == this.btnDownLeftArrow)
+			{
+				this.controller.shiftTiles(3, Direction.UP);
+			}
+			else if(ae.getSource() == this.btnDownLeftArrow)
+			{
+				this.controller.shiftTiles(1, Direction.UP);
+			}
+			
+			else if(ae.getSource() == this.btnTopRightArrow)
+			{
+				this.controller.shiftTiles(5, Direction.DOWN);
+			}
+			else if(ae.getSource() == this.btnTopCenterArrow)
+			{
+				this.controller.shiftTiles(3, Direction.DOWN);
+			}
+			else if(ae.getSource() == this.btnTopLeftArrow)
+			{
+				this.controller.shiftTiles(1, Direction.DOWN);
+			}
+			
+			else if(ae.getSource() == this.btnLeftDownArrow)
+			{
+				this.controller.shiftTiles(5, Direction.RIGHT);
+			}
+			else if(ae.getSource() == this.btnLeftCenterArrow)
+			{
+				this.controller.shiftTiles(3, Direction.RIGHT);
+			}
+			else if(ae.getSource() == this.btnLeftUpArrow)
+			{
+				this.controller.shiftTiles(1, Direction.RIGHT);
+			}
+			
+			else if(ae.getSource() == this.btnRightDownArrow)
+			{
+				this.controller.shiftTiles(5, Direction.LEFT);
+			}
+			else if(ae.getSource() == this.btnRightCenterArrow)
+			{
+				this.controller.shiftTiles(3, Direction.LEFT);
+			}
+			else if(ae.getSource() == this.btnRightUpArrow)
+			{
+				this.controller.shiftTiles(1, Direction.LEFT);
+			}
 		}
-		else if(ae.getSource() == this.btnDownLeftArrow)
+		else
 		{
-			this.controller.shiftTiles(3, Direction.UP);
-		}
-		else if(ae.getSource() == this.btnDownLeftArrow)
-		{
-			this.controller.shiftTiles(1, Direction.UP);
-		}
-		
-		else if(ae.getSource() == this.btnTopRightArrow)
-		{
-			this.controller.shiftTiles(5, Direction.DOWN);
-		}
-		else if(ae.getSource() == this.btnTopCenterArrow)
-		{
-			this.controller.shiftTiles(3, Direction.DOWN);
-		}
-		else if(ae.getSource() == this.btnTopLeftArrow)
-		{
-			this.controller.shiftTiles(1, Direction.DOWN);
-		}
-		
-		else if(ae.getSource() == this.btnLeftDownArrow)
-		{
-			this.controller.shiftTiles(5, Direction.RIGHT);
-		}
-		else if(ae.getSource() == this.btnLeftCenterArrow)
-		{
-			this.controller.shiftTiles(3, Direction.RIGHT);
-		}
-		else if(ae.getSource() == this.btnLeftUpArrow)
-		{
-			this.controller.shiftTiles(1, Direction.RIGHT);
-		}
-		
-		else if(ae.getSource() == this.btnRightDownArrow)
-		{
-			this.controller.shiftTiles(5, Direction.LEFT);
-		}
-		else if(ae.getSource() == this.btnRightCenterArrow)
-		{
-			this.controller.shiftTiles(3, Direction.LEFT);
-		}
-		else if(ae.getSource() == this.btnRightUpArrow)
-		{
-			this.controller.shiftTiles(1, Direction.LEFT);
+			if(ae.getSource() == this.btnNextTurn)
+			{
+				this.controller.nextPlayer();
+			}
 		}
 	}
 }

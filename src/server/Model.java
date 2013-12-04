@@ -62,7 +62,7 @@ public class Model
 		if (this.activePlayers + 1 > this.playerList.size())
 		{
 			this.activePlayers = 0;
-			turnNbr++;
+			this.turnNbr++;
 		}
 	}
 
