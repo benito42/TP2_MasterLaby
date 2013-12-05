@@ -2,7 +2,7 @@ package server;
 
 import java.util.LinkedList;
 
-import client.IGameView;
+import client.IClientGameController;
 
 import server.Tile.TILETYPE;
 
@@ -11,7 +11,7 @@ public class Model
 	private int turnNbr = 1;
 	private int activePlayers = 0;
 	private LinkedList<Player> playerList;
-	private LinkedList<IGameView> viewsList;
+	private LinkedList<IClientGameController> viewsList;
 	private boolean isGameOver = false;
 	private Tile[][] board = new Tile[7][7];
 	private Tile nextTile;
@@ -19,7 +19,7 @@ public class Model
 	public Model()
 	{
 		this.playerList = new LinkedList<Player>();
-		this.viewsList = new LinkedList<IGameView>();
+		this.viewsList = new LinkedList<IClientGameController>();
 	}
 	
 	public boolean isGameOver()
@@ -393,24 +393,29 @@ public class Model
 		this.updateNextTileViews();
 	}
 	
-	public void addView(IGameView newView)
+	public void addObserver(IClientGameController newObserver)
 	{
-		this.viewsList.add(newView);
+		this.viewsList.add(newObserver);
 	}
 	
 	public void updateBoardViews()
 	{
-		for(IGameView view : this.viewsList)
+		for(IClientGameController observer : this.viewsList)
 		{
-			view.updateBoard(this.board);
+			observer.updateBoard(this.board);
 		}
 	}
 	
 	public void updateNextTileViews()
 	{
-		for(IGameView view : this.viewsList)
+		for(IClientGameController observer : this.viewsList)
 		{
-			view.updateNextTile(this.nextTile);
+			observer.updateNextTile(this.nextTile);
 		}
+	}
+
+	public void unregisterObserver(String clientID) 
+	{
+		
 	}
 }

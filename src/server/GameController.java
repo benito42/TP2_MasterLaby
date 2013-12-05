@@ -1,22 +1,48 @@
 package server;
 
-import client.GameView;
-import client.IGameView;
+import java.io.IOException;
+import java.net.Socket;
 
+import client.IClientGameController;
 
-public class GameController implements IGameController
+import net.sf.lipermi.exception.LipeRMIException;
+import net.sf.lipermi.handler.CallHandler;
+import net.sf.lipermi.handler.CallLookup;
+import net.sf.lipermi.net.IServerListener;
+import net.sf.lipermi.net.Server;
+
+public class GameController extends Server implements IGameController
 {
-
+	public static final int SERVER_PORT = 12345;
 	private Model model;
-	private IGameView gameView;
 	
 	public GameController()
 	{
 		this.model = new Model();
 		this.buildBoard();
-		this.gameView = new GameView(this);
-		this.model.addView(gameView);
-		this.gameView.showGameView();
+		
+		this.connectServer();
+	}
+	
+	public void connectServer()
+	{
+		CallHandler callHandler = new CallHandler();
+		try
+		{
+			callHandler.registerGlobal(IGameController.class, this);
+
+			this.addServerListener(new MyServerListener());
+
+			this.bind(SERVER_PORT, callHandler);
+		}
+		catch (LipeRMIException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -44,10 +70,9 @@ public class GameController implements IGameController
 	}
 	
 	@Override
-	public void addView(IGameView newView)
+	public void addObserver(IClientGameController newObserver)
 	{
-		this.model.addView(newView);
-		
+		this.model.addObserver(newObserver);
 	}
 
 	public void gameOver()
@@ -134,4 +159,52 @@ public class GameController implements IGameController
 		this.model.shiftTiles(index, direction);
 	}
 	
+	@Override
+	public Tile getNextTile()
+	{
+		return this.model.getNextTile();
+	}
+	
+	@Override
+	public Tile[][] getBoard()
+	{
+		return this.model.getBoard();
+	}
+	
+	private class MyServerListener implements IServerListener
+	{
+
+		@Override
+		public void clientConnected(Socket socket)
+		{
+			// System.out.println("Client connected: " + socket.getInetAddress() + ":" + socket.getPort());
+		}
+
+		@Override
+		public void clientDisconnected(Socket socket)
+		{
+			// This is a fail-safe in case a client terminates the connection without properly unregistering.
+			unregisterObserver(socket);
+		}
+	}
+
+	@Override
+	public void unregisterObserver()
+	{
+		Socket socket = CallLookup.getCurrentSocket();
+		unregisterObserver(socket);
+	}
+
+	private void unregisterObserver(Socket socket)
+	{
+		String clientID = getClientID(socket);
+		this.model.unregisterObserver(clientID);
+		// System.out.println("unregistered observer for (" + clientID + "). Now has " + this.observers.size() + " observers");
+	}
+
+	private String getClientID(Socket socket)
+	{
+		String clientID = socket.getInetAddress() + ":" + socket.getPort();
+		return clientID;
+	}
 }

@@ -26,7 +26,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 {
 
 	private static final long serialVersionUID = 1L;
-	private IGameController controller;
+	private IClientGameController controller;
 	
 	//private JPanel mainPanel = new JPanel();
 	private JPanel boardPanel = new JPanel();
@@ -62,7 +62,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private JButton btnNextTurn = new JButton("Fin de tour");
 	
-	public GameView(IGameController controller)
+	public GameView(IClientGameController controller)
 	{
 		this.controller = controller;
 		
@@ -363,9 +363,9 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private void buildTileGridLayout()
 	{
-		this.setTileGridLayoutFromTable(this.controller.getModel().getBoard());
+		this.setTileGridLayoutFromTable(this.controller.getBoard());
 		
-		URL input = this.getClass().getResource(this.controller.getModel().getNextTile().getPath());
+		URL input = this.getClass().getResource(this.controller.getNextTile().getPath());
 		ImageIcon img = new ImageIcon(input);
 		
 		this.nextTile.setIcon(img);

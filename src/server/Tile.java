@@ -1,9 +1,11 @@
 package server;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Tile
+public class Tile implements Serializable
 {
+	private static final long serialVersionUID = 9187623762434185929L;
 	private Objective objective;
 	private TILETYPE tileType;
 	private int positionX;
