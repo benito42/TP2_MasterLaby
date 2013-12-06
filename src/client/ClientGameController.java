@@ -57,11 +57,6 @@ public class ClientGameController implements IClientGameController
 		}
 	}
 
-	public void increaseCounterRequest()
-	{
-		new Timer().schedule(new ServerContacter(), 1);
-	}
-
 	public void closeRequest()
 	{
 		this.myServiceCaller.unregisterObserver();
@@ -78,10 +73,19 @@ public class ClientGameController implements IClientGameController
 
 	private class ServerContacter extends TimerTask
 	{
+		private int index;
+		private Direction direction;
+		
+		public ServerContacter(int index, Direction direction)
+		{
+			this.index = index;
+			this.direction = direction;
+		}
+		
 		@Override
 		public void run()
 		{
-			//myServiceCaller.increaseNumber();
+			myServiceCaller.shiftTiles(index, direction);
 		}
 	}
 	
@@ -94,7 +98,7 @@ public class ClientGameController implements IClientGameController
 	@Override
 	public void shiftTiles(int index, Direction direction)
 	{
-		this.myServiceCaller.shiftTiles(index, direction);
+		new Timer().schedule(new ServerContacter(index, direction), 1);
 	}
 	
 	@Override
