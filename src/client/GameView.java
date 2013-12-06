@@ -1,21 +1,28 @@
 package client;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import server.Avatar;
@@ -293,89 +300,33 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private void buildPlayers()
 	{
+
+		JLayeredPane layeredPane = new JLayeredPane();
+		//layeredPane.setPreferredSize(new Dimension(150, 150));
+		//layeredPane.setBorder(BorderFactory.createTitledBorder("Test Layered Pane"));
+		
 		URL inputTile = this.getClass().getResource(this.controller.getBoard()[0][0].getPath());
 		ImageIcon imgTile = new ImageIcon(inputTile);
-		
+		JLabel tempTile = new JLabel(imgTile);
 		
 		URL inputAvatar = this.getClass().getResource(Avatar.commando.getAvatar());
 		ImageIcon imgAvatar = new ImageIcon(inputAvatar);
+		JLabel tempAvatar = new JLabel(imgAvatar);
 		
-		JLabel temp = new JLabel(imgAvatar);
-		this.board[0][0] = temp;
+		layeredPane.add(tempTile, 0);
+		layeredPane.add(tempAvatar, 1);
 		
-		//this.tilePanel.add(temp);
+		this.tilePanel.add(layeredPane);
 	}
 	
 	private void buildBoardLayout()
 	{
 		this.buildTileGridLayout();
-		
 
         this.buildArrowLayout(Direction.UP);
         this.buildArrowLayout(Direction.RIGHT);
         this.buildArrowLayout(Direction.DOWN);
         this.buildArrowLayout(Direction.LEFT);
-        /*
-		boardPanel.setLayout(new GridLayout(0, 3));
-		boardPanel.add(new JLabel("TopLeft"));
-		boardPanel.add(new JLabel("TopMid"));
-		boardPanel.add(new JLabel("TopRight"));
-		boardPanel.add(new JLabel("MidLeft"));
-		boardPanel.add(tilePanel, BorderLayout.CENTER);
-
-		boardPanel.add(new JLabel("MidRight"));
-		boardPanel.add(new JLabel("BottomLeft"));
-		boardPanel.add(new JLabel("BottomMid"));
-		boardPanel.add(new JLabel("BottomRight"));*/
-		
-	
-		
-		/*
-		JButton button;
-		GridBagConstraints c = new GridBagConstraints();
-
-		button = new JButton("Button 1");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		boardPanel.add(button, c);
-
-		button = new JButton("Button 2");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 1;
-		c.gridy = 0;
-		boardPanel.add(button, c);
-
-		button = new JButton("Button 3");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 2;
-		c.gridy = 0;
-		boardPanel.add(button, c);
-		
-		boardPanel.add(tilePanel);
-
-		button = new JButton("Long-Named Button 4");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 40;      //make this component tall
-		c.weightx = 0.0;
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.gridy = 1;
-		boardPanel.add(button, c);
-
-		button = new JButton("5");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 0;       //reset to default
-		c.weighty = 1.0;   //request any extra vertical space
-		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
-		c.insets = new Insets(10,0,0,0);  //top padding
-		c.gridx = 1;       //aligned with button 2
-		c.gridwidth = 2;   //2 columns wide
-		c.gridy = 2;       //third row
-		boardPanel.add(button, c);
-		*/
 	}
 	
 	private void buildTileGridLayout()

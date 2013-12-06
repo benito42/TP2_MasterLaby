@@ -1,5 +1,6 @@
 package client;
 
+
 public class MenuController implements IMenuController
 {
 	public static void main(String[] args) 
@@ -20,7 +21,7 @@ public class MenuController implements IMenuController
 	}
 
 	@Override
-	public void startGame() 
+	public void startGame()
 	{
 		new ClientGameController();
 	}
