@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import server.Avatar;
 import server.Direction;
 import server.IGameController;
 import server.Tile;
@@ -273,6 +274,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
         this.setFocusable(true);
         
         this.buildBoardLayout();
+        this.buildPlayers();
         
         this.add(this.topArrowPanel, BorderLayout.NORTH);
         this.add(this.rightArrowPanel, BorderLayout.EAST);
@@ -287,6 +289,21 @@ public class GameView extends JFrame implements ActionListener, IGameView
         //this.add(mainPanel);
         this.pack();
         this.repaint();
+	}
+	
+	private void buildPlayers()
+	{
+		URL inputTile = this.getClass().getResource(this.controller.getBoard()[0][0].getPath());
+		ImageIcon imgTile = new ImageIcon(inputTile);
+		
+		
+		URL inputAvatar = this.getClass().getResource(Avatar.commando.getAvatar());
+		ImageIcon imgAvatar = new ImageIcon(inputAvatar);
+		
+		JLabel temp = new JLabel(imgAvatar);
+		this.board[0][0] = temp;
+		
+		//this.tilePanel.add(temp);
 	}
 	
 	private void buildBoardLayout()
