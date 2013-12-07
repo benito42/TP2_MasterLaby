@@ -1,8 +1,11 @@
 package server;
 
+import java.io.Serializable;
 
-public class Player
+
+public class Player implements Serializable
 {
+	private static final long serialVersionUID = 7243623938818882012L;
 	private Tile currentTile;
 	private String name = "DEFAULT";
 	private Avatar avatar = Avatar.commando;

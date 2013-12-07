@@ -1,9 +1,12 @@
 package server;
 
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import client.IClientGameController;
-
 import server.Tile.TILETYPE;
 
 public class Model
@@ -11,15 +14,14 @@ public class Model
 	private int turnNbr = 1;
 	private int activePlayers = 0;
 	private LinkedList<Player> playerList;
-	private LinkedList<IClientGameController> viewsList;
+	private final Map<String, IClientGameController> observers = new HashMap<String, IClientGameController>();
 	private boolean isGameOver = false;
 	private Tile[][] board = new Tile[7][7];
-	private Tile nextTile;
+	private Tile nextTile = new Tile(TILETYPE.horizontal_up, -1, -1);
 
 	public Model()
 	{
 		this.playerList = new LinkedList<Player>();
-		this.viewsList = new LinkedList<IClientGameController>();
 	}
 	
 	public boolean isGameOver()
@@ -244,8 +246,6 @@ public class Model
 
 		Tile tempTile66 = new Tile(TILETYPE.up_left, 6, 6);
 		this.board[6][6] = tempTile66;
-		
-		this.nextTile = new Tile(TILETYPE.horizontal_up, -1, -1);
 	}
 	
 	public Tile getTile(int xPosition, int yPosition)
@@ -389,33 +389,105 @@ public class Model
 			break;
 		}
 		
-		this.updateBoardViews();
-		this.updateNextTileViews();
+		this.notifyAllObservers();
 	}
 	
-	public void addObserver(IClientGameController newObserver)
+	private void notifyAllObservers()
 	{
-		this.viewsList.add(newObserver);
+		new Thread(new ObserversNotifyer()).start();
 	}
-	
-	public void updateBoardViews()
+
+	private class ObserversNotifyer implements Runnable
 	{
-		for(IClientGameController observer : this.viewsList)
+		@Override
+		public void run()
 		{
-			observer.updateBoard(this.board);
+			String[][] newBoard = getTilesPaths();
+			String newNextTile = nextTile.getPath();
+
+			Iterator<String> observersIterator = observers.keySet().iterator();
+			while (observersIterator.hasNext())
+			{
+				String clientID = observersIterator.next();
+				IClientGameController obs = observers.get(clientID);
+				if (obs == null)
+					observersIterator.remove();
+				else
+				{
+					try
+					{
+						obs.updateBoard(newBoard);
+						obs.updateNextTile(newNextTile);
+					}
+					catch (UndeclaredThrowableException ute)
+					{// The observer is unreachable, remove it right away (we could be more flexible here and require a certain threshold of failure before kicking him)
+						observersIterator.remove();
+					}
+				}
+			}
+
 		}
 	}
 	
-	public void updateNextTileViews()
+	public String[][] getTilesPaths()
 	{
-		for(IClientGameController observer : this.viewsList)
+		String[][] tilesPaths = new String[7][7];
+		
+		for(int i = 0; i < 7; i++)
 		{
-			observer.updateNextTile(this.nextTile);
+			for(int j = 0; j < 7; j++)
+			{
+				tilesPaths[i][j] = this.board[i][j].getPath();
+			}
+		}
+		
+		return tilesPaths;
+	}
+	
+	public void addObserver(String observerID, IClientGameController observer)
+	{
+		this.observers.put(observerID, observer);
+
+		new ObserverNotifyer(observer, this.getTilesPaths(), this.nextTile.getPath(), Thread.currentThread()).start();
+	}
+
+	private class ObserverNotifyer extends Thread
+	{
+		private final IClientGameController obs;
+		private final String[][] newBoard;
+		private final String newNextTile;
+		private final Thread father;
+
+		private ObserverNotifyer(IClientGameController obs, String[][] newBoard, String newNextTile, Thread father)
+		{
+			this.obs = obs;
+			this.newBoard = newBoard;
+			this.newNextTile = newNextTile;
+			this.father = father;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				// We wait for the parent thread to terminate (the connection from the client to close) before notifying (and thus connecting back to) the client.
+				this.father.join();
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				obs.updateBoard(this.newBoard);
+				obs.updateNextTile(this.newNextTile);
+			}
 		}
 	}
 
-	public void unregisterObserver(String clientID) 
+	public void unregisterObserver(String clientID)
 	{
-		
+		this.observers.remove(clientID);
 	}
 }

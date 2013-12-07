@@ -14,7 +14,7 @@ import net.sf.lipermi.net.Server;
 public class GameController extends Server implements IGameController
 {
 	public static final int SERVER_PORT = 12345;
-	private Model model;
+	private final Model model;
 	
 	public GameController()
 	{
@@ -72,7 +72,9 @@ public class GameController extends Server implements IGameController
 	@Override
 	public void addObserver(IClientGameController newObserver)
 	{
-		this.model.addObserver(newObserver);
+		Socket socket = CallLookup.getCurrentSocket();
+		String clientID = getClientID(socket);
+		this.model.addObserver(clientID, newObserver);
 	}
 
 	public void gameOver()
@@ -160,15 +162,15 @@ public class GameController extends Server implements IGameController
 	}
 	
 	@Override
-	public Tile getNextTile()
+	public String getNextTile()
 	{
-		return this.model.getNextTile();
+		return this.model.getNextTile().getPath();
 	}
 	
 	@Override
-	public Tile[][] getBoard()
+	public String[][] getBoard()
 	{
-		return this.model.getBoard();
+		return this.model.getTilesPaths();
 	}
 	
 	private class MyServerListener implements IServerListener
@@ -199,7 +201,6 @@ public class GameController extends Server implements IGameController
 	{
 		String clientID = getClientID(socket);
 		this.model.unregisterObserver(clientID);
-		// System.out.println("unregistered observer for (" + clientID + "). Now has " + this.observers.size() + " observers");
 	}
 
 	private String getClientID(Socket socket)

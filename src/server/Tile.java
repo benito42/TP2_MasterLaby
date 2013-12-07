@@ -12,7 +12,7 @@ public class Tile implements Serializable
 	private int positionY;
 	public LinkedList<Player> playerList = new LinkedList<Player>();
 	
-	public enum TILETYPE
+	public enum TILETYPE implements Serializable
 	{
 		horizontal(false, true, false, true, "/img/horizontal.jpg"), 
 		vertical(true, false, true, false, "/img/vertical.jpg"),

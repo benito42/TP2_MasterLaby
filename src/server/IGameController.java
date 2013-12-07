@@ -11,8 +11,8 @@ public interface IGameController
 	public void nextPlayer();
 	
 	public void gameOver();
-	public Tile getNextTile();
-	public Tile[][] getBoard();
+	public String getNextTile();
+	public String[][] getBoard();
 	public void moveUp();
 	public void moveDown();
 	public void moveLeft();

@@ -1,6 +1,8 @@
 package server;
 
-public enum Avatar
+import java.io.Serializable;
+
+public enum Avatar implements Serializable
 {
 	commando("/img/Avatar_Commando.jpg", "/img/commando1.jpg", "/img/commando2.jpg", "/img/commando3.jpg"),
 	darkVador("/img/Avatar_DarkVador.jpg", "/img/DarkVador1.jpg", "/img/DarkVador2.jpg", "/img/DarkVador3.jpg"),

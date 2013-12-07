@@ -1,10 +1,9 @@
 package client;
 
-import server.Tile;
-
 public interface IGameView
 {
 	public void showGameView();
-	public void updateBoard(Tile[][] newBoard);
-	public void updateNextTile(Tile nextTile);
+	public void updateBoard(String[][] newBoardPaths);
+	public void updateNextTile(String nextTilePath);
+	public void setLayout();
 }

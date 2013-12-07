@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import server.Direction;
 import server.GameController;
 import server.IGameController;
-import server.Tile;
 
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
@@ -15,20 +14,22 @@ import net.sf.lipermi.net.Client;
 
 public class ClientGameController implements IClientGameController
 {
-	private static final long serialVersionUID = 7471895685769620206L;
-
 	public static final String SERVER_IP_ADRESS = "127.0.0.1";
 
 	private IGameController myServiceCaller;
 	private Client client;
-	private final IGameView view;
+	private IGameView view;
 
 	public ClientGameController()
 	{
+		this.view = new GameView(this);
+		
 		this.connectToServer();
 		
-		this.view = new GameView(this);
 		this.view.showGameView();
+		
+		this.view.updateBoard(this.getBoard());
+		this.view.updateNextTile(this.getNewNextTile());
 	}
 	
 	private void connectToServer()
@@ -71,12 +72,12 @@ public class ClientGameController implements IClientGameController
 		}
 	}
 
-	private class ServerContacter extends TimerTask
+	private class ServerContacterShiftTiles extends TimerTask
 	{
 		private int index;
 		private Direction direction;
 		
-		public ServerContacter(int index, Direction direction)
+		public ServerContacterShiftTiles(int index, Direction direction)
 		{
 			this.index = index;
 			this.direction = direction;
@@ -89,6 +90,51 @@ public class ClientGameController implements IClientGameController
 		}
 	}
 	
+	private class ServerContacterGetBoard extends TimerTask
+	{
+		private String[][] newBoard;
+		
+		@Override
+		public void run()
+		{
+			this.newBoard = myServiceCaller.getBoard();
+		}
+		
+		public String[][] getNewBoard()
+		{
+			return this.newBoard;
+		}
+	}
+	
+	private class ServerContacterGetNextTile extends TimerTask
+	{
+		private String newNextTile;
+		
+		@Override
+		public void run()
+		{
+			this.newNextTile = myServiceCaller.getNextTile();
+		}
+		
+		public String getNewNextTile()
+		{
+			return this.newNextTile;
+		}
+	}
+	
+
+	@Override
+	public String[][] getBoard() 
+	{
+		return new ServerContacterGetBoard().getNewBoard();
+	}
+	
+	@Override
+	public String getNewNextTile() 
+	{
+		return new ServerContacterGetNextTile().getNewNextTile();
+	}
+	
 	@Override
 	public void nextPlayer()
 	{
@@ -98,30 +144,18 @@ public class ClientGameController implements IClientGameController
 	@Override
 	public void shiftTiles(int index, Direction direction)
 	{
-		new Timer().schedule(new ServerContacter(index, direction), 1);
+		new Timer().schedule(new ServerContacterShiftTiles(index, direction), 1);
 	}
 	
 	@Override
-	public void updateBoard(Tile[][] newBoard) 
+	public void updateBoard(String[][] newBoard) 
 	{
 		this.view.updateBoard(newBoard);
 	}
 
 	@Override
-	public void updateNextTile(Tile nextTile) 
+	public void updateNextTile(String nextTile) 
 	{
 		this.view.updateNextTile(nextTile);
-	}
-
-	@Override
-	public Tile[][] getBoard() 
-	{
-		return this.myServiceCaller.getBoard();
-	}
-
-	@Override
-	public Tile getNextTile() 
-	{
-		return this.myServiceCaller.getNextTile();
 	}
 }

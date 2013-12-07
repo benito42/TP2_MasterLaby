@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +34,9 @@ import server.Tile;
 
 public class GameView extends JFrame implements ActionListener, IGameView
 {
+	private static final long serialVersionUID = 8358872970122547830L;
 
-	private static final long serialVersionUID = 1L;
-	private IClientGameController controller;
+	private final ClientGameController controller;
 	
 	//private JPanel mainPanel = new JPanel();
 	private JPanel boardPanel = new JPanel();
@@ -42,10 +44,10 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	//private JPanel objectivePanel = new JPanel();
 	
-	private JPanel topArrowPanel = new JPanel();
-	private JPanel rightArrowPanel = new JPanel();
-	private JPanel bottomArrowPanel = new JPanel();
-	private JPanel leftArrowPanel = new JPanel();
+	private final JPanel topArrowPanel = new JPanel();
+	private final JPanel rightArrowPanel = new JPanel();
+	private final JPanel bottomArrowPanel = new JPanel();
+	private final JPanel leftArrowPanel = new JPanel();
 	
 	private LinkedList<JButton> listArrowButtons = new LinkedList<JButton>();
 	
@@ -70,9 +72,10 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private JButton btnNextTurn = new JButton("Fin de tour");
 	
-	public GameView(IClientGameController controller)
+	public GameView(ClientGameController controller)
 	{
 		this.controller = controller;
+		this.addWindowListener(new WindowHandler());
 		
 		this.setArrowButtons();
 		this.setLayout();
@@ -274,14 +277,14 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		}
 	}
 	
-	private void setLayout()
+	@Override
+	public void setLayout()
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
         this.setFocusable(true);
         
         this.buildBoardLayout();
-        this.buildPlayers();
         
         this.add(this.topArrowPanel, BorderLayout.NORTH);
         this.add(this.rightArrowPanel, BorderLayout.EAST);
@@ -294,18 +297,19 @@ public class GameView extends JFrame implements ActionListener, IGameView
         //mainPanel.add(boardPanel, BorderLayout.WEST);
         
         //this.add(mainPanel);
+
         this.pack();
         this.repaint();
 	}
 	
-	private void buildPlayers()
+	public void buildPlayers(Tile[][] board)
 	{
 
 		JLayeredPane layeredPane = new JLayeredPane();
 		//layeredPane.setPreferredSize(new Dimension(150, 150));
 		//layeredPane.setBorder(BorderFactory.createTitledBorder("Test Layered Pane"));
 		
-		URL inputTile = this.getClass().getResource(this.controller.getBoard()[0][0].getPath());
+		URL inputTile = this.getClass().getResource(board[0][0].getPath());
 		ImageIcon imgTile = new ImageIcon(inputTile);
 		JLabel tempTile = new JLabel(imgTile);
 		
@@ -321,7 +325,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private void buildBoardLayout()
 	{
-		this.buildTileGridLayout();
+		this.setTileGridLayoutFromTable();
 
         this.buildArrowLayout(Direction.UP);
         this.buildArrowLayout(Direction.RIGHT);
@@ -329,17 +333,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
         this.buildArrowLayout(Direction.LEFT);
 	}
 	
-	private void buildTileGridLayout()
-	{
-		this.setTileGridLayoutFromTable(this.controller.getBoard());
-		
-		URL input = this.getClass().getResource(this.controller.getNextTile().getPath());
-		ImageIcon img = new ImageIcon(input);
-		
-		this.nextTile.setIcon(img);
-	}
-	
-	private void setTileGridLayoutFromTable(Tile[][] board)
+	private void setTileGridLayoutFromTable()
 	{
 		this.tilePanel.setLayout(new GridLayout(7, 7));
 		
@@ -347,10 +341,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				URL input = this.getClass().getResource(board[j][i].getPath());
-				ImageIcon img = new ImageIcon(input);
-				
-				JLabel temp = new JLabel(img);
+				JLabel temp = new JLabel(new ImageIcon());
 				
 				this.board[j][i] = temp;
 				
@@ -368,13 +359,13 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	}
 	
 	@Override
-	public void updateBoard(Tile[][] newBoard) 
+	public void updateBoard(String[][] newBoardPaths) 
 	{
 		for(int i = 0; i < 7; i++)
 		{
 			for(int j = 0; j < 7; j++)
 			{
-				URL input = this.getClass().getResource(newBoard[j][i].getPath());
+				URL input = this.getClass().getResource(newBoardPaths[j][i]);
 				ImageIcon img = new ImageIcon(input);
 				
 				this.board[j][i].setIcon(img);
@@ -383,9 +374,9 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	}
 	
 	@Override
-	public void updateNextTile(Tile nextTile) 
+	public void updateNextTile(String nextTilePath) 
 	{
-		URL input = this.getClass().getResource(nextTile.getPath());
+		URL input = this.getClass().getResource(nextTilePath);
 		ImageIcon img = new ImageIcon(input);
 		
 		this.nextTile.setIcon(img);
@@ -464,5 +455,47 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				this.controller.nextPlayer();
 			}
 		}
+	}
+	
+	private class WindowHandler implements WindowListener
+	{
+
+		@Override
+		public void windowActivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+			controller.closeRequest();
+			dispose();
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e)
+		{
+		}
+
 	}
 }
