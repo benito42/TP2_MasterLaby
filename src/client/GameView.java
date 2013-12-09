@@ -21,10 +21,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import server.Avatar;
 import server.Direction;
 import server.Objective;
 import server.Player;
@@ -37,11 +35,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private final ClientGameController controller;
 	private int noPlayer;
 	
-	//private JPanel mainPanel = new JPanel();
-	private JPanel boardPanel = new JPanel();
 	private JPanel tilePanel = new JPanel();
-	
-	//private JPanel objectivePanel = new JPanel();
 	
 	private final JPanel topArrowPanel = new JPanel();
 	private final JPanel rightArrowPanel = new JPanel();
@@ -71,10 +65,9 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private JButton btnNextTurn = new JButton("Fin de tour");
 	
-	BufferedImage backGroundImage;
-	BufferedImage frontImage;
-	BufferedImage scaled;
-	JLabel label;
+	private BufferedImage backGroundImage;
+	private BufferedImage frontImage;
+	private BufferedImage scaled;
 	
 	public GameView(ClientGameController controller)
 	{
@@ -366,16 +359,16 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		this.backGroundImage = backGroundImage;
 		this.frontImage = frontImage;
 		
-	    scaled = new BufferedImage(frontImage.getWidth()/2,frontImage.getHeight()/2,BufferedImage.TYPE_INT_RGB);
-	    Graphics g = scaled.getGraphics();
-	    g.drawImage(frontImage,0,0,scaled.getWidth(),scaled.getHeight(),null);
+	    scaled = new BufferedImage(this.frontImage.getWidth()/2,this.frontImage.getHeight()/2,BufferedImage.TYPE_INT_RGB);
+	    Graphics g = this.scaled.getGraphics();
+	    g.drawImage(frontImage,0,0,this.scaled.getWidth(),this.scaled.getHeight(),null);
 	    g.dispose();
 	
-	    Graphics g2 = backGroundImage.getGraphics();
+	    Graphics g2 = this.backGroundImage.getGraphics();
 		int x = positionOnTile.getX();
 		int y = positionOnTile.getY();
 	
-		g2.drawImage( scaled, x, y, null );
+		g2.drawImage( this.scaled, x, y, null );
 		g2.dispose();
 	
 	    return backGroundImage;
@@ -610,25 +603,23 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private void handleKeyPress(int keyCode)
     {
-         
-        switch (keyCode)
+        if(this.listArrowButtons.getFirst().isEnabled())
         {
-        case 65: //37
-        	this.controller.moveLeft();
-        	System.out.println("LEFT key");
-            break;
-        case 87: //38
-        	this.controller.moveUp();
-        	System.out.println("UP key");
-            break;
-        case 68: //39
-        	this.controller.moveRight();
-        	System.out.println("RIGHT key");
-            break;
-        case 83: //40
-        	this.controller.moveDown();
-        	System.out.println("DOWN key");
-            break;
+	        switch (keyCode)
+	        {
+	        case 65: //37
+	        	this.controller.moveLeft();
+	            break;
+	        case 87: //38
+	        	this.controller.moveUp();
+	            break;
+	        case 68: //39
+	        	this.controller.moveRight();
+	            break;
+	        case 83: //40
+	        	this.controller.moveDown();
+	            break;
+	        }
         }
     }
 }
