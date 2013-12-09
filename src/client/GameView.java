@@ -18,7 +18,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import server.Avatar;
@@ -301,35 +300,14 @@ public class GameView extends JFrame implements ActionListener, IGameView
         this.repaint();
 	}
 	
-	public void buildPlayers(Tile[][] board)
-	{
-
-		JLayeredPane layeredPane = new JLayeredPane();
-		//layeredPane.setPreferredSize(new Dimension(150, 150));
-		//layeredPane.setBorder(BorderFactory.createTitledBorder("Test Layered Pane"));
-		
-		URL inputTile = this.getClass().getResource(board[0][0].getPath());
-		ImageIcon imgTile = new ImageIcon(inputTile);
-		JLabel tempTile = new JLabel(imgTile);
-		
-		URL inputAvatar = this.getClass().getResource(Avatar.commando.getAvatarPath());
-		ImageIcon imgAvatar = new ImageIcon(inputAvatar);
-		JLabel tempAvatar = new JLabel(imgAvatar);
-		
-		layeredPane.add(tempTile, 0);
-		layeredPane.add(tempAvatar, 1);
-		
-		this.tilePanel.add(layeredPane);
-	}
-	
-	private BufferedImage buildPlayers(LinkedList<Player> playerList)
+	private BufferedImage buildPlayers(LinkedList<Player> playerList, Tile[][] newBoard)
 	{
 		BufferedImage buffImageTemp = null;
 		for (Player p : playerList)
 			{
 				if (buffImageTemp == null)
 				{
-					buffImageTemp = imageOnImage(createBufferedImage(this.controller.getBoard()[0][0].getPath()), 
+					buffImageTemp = imageOnImage(createBufferedImage(newBoard[p.getCurrentTile().getPositionY()][p.getCurrentTile().getPositionX()].getPath()), 
 							createBufferedImage(p.getAvatar().getAvatarPath()), 
 							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
 				}
@@ -438,7 +416,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				//add player to tile
 				if (!newBoard[j][i].getPlayerList().isEmpty())
 				{
-					buffImgTemp = buildPlayers(newBoard[j][i].getPlayerList());
+					buffImgTemp = buildPlayers(newBoard[j][i].getPlayerList(), newBoard);
 				}
 				
 				imageIconTemp = new ImageIcon(buffImgTemp);
