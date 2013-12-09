@@ -39,6 +39,15 @@ public class Model
 		return this.board;
 	}
 
+	public void setCurrentTileOnActivePlayer(Tile tile)
+	{
+		Player playerTemp = this.playerList.get(this.activePlayer);
+		playerTemp.getCurrentTile().playerList.remove(playerTemp);
+		playerTemp.setCurrentTile(tile);
+		playerTemp.getCurrentTile().playerList.add(playerTemp);
+		this.notifyNewBoard();
+		
+	}
 	public void addPlayer(Player player)
 	{
 		this.playerList.add(player);

@@ -148,7 +148,7 @@ public class ClientGameController implements IClientGameController
 	@Override
 	public void nextPlayer()
 	{
-		new ServerContacterEndTurn();
+		new Timer().schedule(new ServerContacterEndTurn(), 1);
 	}
 	
 	@Override
@@ -179,5 +179,69 @@ public class ClientGameController implements IClientGameController
 	public void updateTurnChange(int noActivePlayer) 
 	{
 		this.view.updateTurnChange(noActivePlayer);
+	}
+
+	private class ServerContacterMoveUp extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.moveUp();
+		}
+	}
+	
+
+	private class ServerContacterMoveDown extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.moveDown();
+		}
+	}
+	
+
+	private class ServerContacterMoveLeft extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.moveLeft();
+		}
+	}
+	
+
+	private class ServerContacterMoveRight extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.moveRight();
+		}
+	}
+
+
+	@Override
+	public void moveUp() 
+	{
+		new Timer().schedule(new ServerContacterMoveUp(), 1);
+	}
+
+	@Override
+	public void moveDown() 
+	{
+		new Timer().schedule(new ServerContacterMoveDown(), 1);
+	}
+
+	@Override
+	public void moveLeft() 
+	{
+		new Timer().schedule(new ServerContacterMoveLeft(), 1);
+	}
+
+	@Override
+	public void moveRight() 
+	{
+		new Timer().schedule(new ServerContacterMoveRight(), 1);
 	}
 }

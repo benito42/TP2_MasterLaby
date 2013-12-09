@@ -30,6 +30,8 @@ public class GameController extends Server implements IGameController
 	{
 		Player playerTest = new Player("Steve", Avatar.commando, model.getBoard()[0][0], 1);
 		model.addPlayer(playerTest);
+		Player playerTest2 = new Player("Henri", Avatar.viking, model.getBoard()[6][0], 2);
+		model.addPlayer(playerTest2);
 		model.buildGameForPlayersAndObjectives();
 	}
 	
@@ -102,7 +104,7 @@ public class GameController extends Server implements IGameController
 			if (activePlayerTile.goUp() && 
 					this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1).goDown())
 			{
-				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1));
+				this.model.setCurrentTileOnActivePlayer(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() - 1));
 			}
 		}
 	}
@@ -117,7 +119,7 @@ public class GameController extends Server implements IGameController
 			if (activePlayerTile.goDown() && 
 					this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1).goUp())
 			{
-				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1));
+				this.model.setCurrentTileOnActivePlayer(this.model.getTile(activePlayerTile.getPositionX(),  activePlayerTile.getPositionY() + 1));
 			}
 		}
 	}
@@ -132,7 +134,7 @@ public class GameController extends Server implements IGameController
 			if (activePlayerTile.goLeft() && 
 					this.model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()).goRight())
 			{
-				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()));
+				this.model.setCurrentTileOnActivePlayer(this.model.getTile(activePlayerTile.getPositionX() - 1,  activePlayerTile.getPositionY()));
 			}
 		}
 		
@@ -148,7 +150,7 @@ public class GameController extends Server implements IGameController
 			if (activePlayerTile.goRight() && 
 					this.model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()).goLeft())
 			{
-				this.model.getActivePlayer().setCurrentTile(this.model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()));
+				this.model.setCurrentTileOnActivePlayer(this.model.getTile(activePlayerTile.getPositionX() + 1,  activePlayerTile.getPositionY()));
 			}
 		}
 		

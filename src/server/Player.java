@@ -58,6 +58,7 @@ public class Player implements Serializable
 
 	public void setCurrentTile(Tile currentTile) {
 		this.currentTile = currentTile;
+		
 	}
 		
 }

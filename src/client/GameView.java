@@ -3,8 +3,11 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
@@ -18,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import server.Avatar;
@@ -79,7 +83,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		
 		this.setArrowButtons();
 		this.setLayout();
-		
+		processKeys();
 		this.btnNextTurn.setEnabled(false);
 	}
 	
@@ -308,7 +312,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			{
 				if (buffImageTemp == null)
 				{
-					buffImageTemp = imageOnImage(createBufferedImage(newBoard[p.getCurrentTile().getPositionY()][p.getCurrentTile().getPositionX()].getPath()), 
+					buffImageTemp = imageOnImage(createBufferedImage(newBoard[p.getCurrentTile().getPositionX()][p.getCurrentTile().getPositionY()].getPath()), 
 							createBufferedImage(p.getAvatar().getAvatarPath()), 
 							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
 				}
@@ -569,4 +573,44 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		}
 
 	}
+	
+	private void processKeys()
+    {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher( 
+            new KeyEventDispatcher()
+            {  
+                public boolean dispatchKeyEvent(KeyEvent e)
+                {
+                    if(e.getID() == KeyEvent.KEY_PRESSED)
+                    {
+                        handleKeyPress(e.getKeyCode());
+                    }
+                    return false;
+                }  
+            });
+    }
+	
+	private void handleKeyPress(int keyCode)
+    {
+         
+        switch (keyCode)
+        {
+        case 65: //37
+        	this.controller.moveLeft();
+        	System.out.println("LEFT key");
+            break;
+        case 87: //38
+        	this.controller.moveUp();
+        	System.out.println("UP key");
+            break;
+        case 68: //39
+        	this.controller.moveRight();
+        	System.out.println("RIGHT key");
+            break;
+        case 83: //40
+        	this.controller.moveDown();
+        	System.out.println("DOWN key");
+            break;
+        }
+    }
 }

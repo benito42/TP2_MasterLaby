@@ -11,6 +11,10 @@ public interface IClientGameController
 	public void updateTurnChange(int noActivePlayer);
 	public void shiftTiles(int index, Direction direciton);
 	public void nextPlayer();
+	public void moveUp();
+	public void moveDown();
+	public void moveLeft();
+	public void moveRight();
 	
 	public Tile[][] getBoard();
 	public Tile getNewNextTile();
