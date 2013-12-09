@@ -490,7 +490,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			{
 				this.controller.shiftTiles(5, Direction.UP);
 			}
-			else if(ae.getSource() == this.btnDownLeftArrow)
+			else if(ae.getSource() == this.btnDownCenterArrow)
 			{
 				this.controller.shiftTiles(3, Direction.UP);
 			}
