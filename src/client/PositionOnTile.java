@@ -19,23 +19,5 @@ public enum PositionOnTile
 		
 		public int getX(){return this.intX;}
 		public int getY(){return this.intY;}
-		
-		public PositionOnTile getPositionOnTile(int playerNumber)
-		{
-			switch (playerNumber)
-			{
-			case 1:
-				return upLeft;
-			case 2:
-				return upRight;
-			case 3:
-				return downRight;
-			case 4:
-				return downLeft;
-			default:
-				return null;
-			}
-			
-		}
 	
 }

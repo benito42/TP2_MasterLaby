@@ -314,17 +314,35 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				{
 					buffImageTemp = imageOnImage(createBufferedImage(newBoard[p.getCurrentTile().getPositionX()][p.getCurrentTile().getPositionY()].getPath()), 
 							createBufferedImage(p.getAvatar().getAvatarPath()), 
-							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
+							getPositionOnTile(p.getPlayerNumber()));
 				}
 				else
 				{
 					buffImageTemp = imageOnImage(buffImageTemp, 
 							createBufferedImage(p.getAvatar().getAvatarPath()), 
-							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
+							getPositionOnTile(p.getPlayerNumber()));
 				}
 			}
 		
 		return buffImageTemp;
+	}
+	
+	public PositionOnTile getPositionOnTile(int playerNumber)
+	{
+		switch (playerNumber)
+		{
+		case 1:
+			return PositionOnTile.upLeft;
+		case 2:
+			return PositionOnTile.upRight;
+		case 3:
+			return PositionOnTile.downRight;
+		case 4:
+			return PositionOnTile.downLeft;
+		default:
+			return null;
+		}
+		
 	}
 	
 	private BufferedImage createBufferedImage(String path)
