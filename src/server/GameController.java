@@ -20,8 +20,17 @@ public class GameController extends Server implements IGameController
 	{
 		this.model = new Model();
 		this.buildBoard();
+		buildTest(); //sert pour les test
 		
 		this.connectServer();
+	}
+	
+	//sert a tester
+	private void buildTest()
+	{
+		Player playerTest = new Player("Steve", Avatar.commando, model.getBoard()[0][0], 1);
+		model.addPlayer(playerTest);
+		model.buildGameForPlayersAndObjectives();
 	}
 	
 	public void connectServer()

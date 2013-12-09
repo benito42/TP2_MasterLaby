@@ -254,7 +254,7 @@ public class Model
 		return this.board[xPosition][yPosition];
 	}
 	
-	private void buildGameForPlayersAndObjectives()
+	public void buildGameForPlayersAndObjectives()
 	{
 		for (int i = 0; i < playerList.size(); i ++)
 		{
