@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import server.Avatar;
 import server.Direction;
+import server.Objective;
 import server.Player;
 import server.Tile;
 
@@ -403,11 +404,12 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				ImageIcon imageIconTemp;
 				BufferedImage buffImgTemp;
 				
+				Objective objTest = newBoard[j][i].getObjective();
 				//create tile with objectives
-				if (newBoard[j][i].getObjective() != null && newBoard[j][i].getObjective().isObjectiveReached() == false)
+				if (newBoard[j][i].getObjective() != null && objTest.isObjectiveReached() == false)
 				{
 					buffImgTemp = imageOnImage(createBufferedImage(newBoard[0][0].getPath()), 
-							createBufferedImage(newBoard[0][0].getObjective().getPath()), PositionOnTile.mid);
+							createBufferedImage(newBoard[j][i].getObjective().getPath()), PositionOnTile.mid);
 				}
 				else//create tile without objectives
 				{
