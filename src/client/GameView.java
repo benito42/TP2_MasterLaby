@@ -78,6 +78,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		this.addWindowListener(new WindowHandler());
 		
 		this.setArrowButtons();
+		this.setLayout();
 		
 		this.btnNextTurn.setEnabled(false);
 	}
@@ -392,11 +393,34 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private void setTileGridLayoutFromTable()
 	{
 		this.tilePanel.setLayout(new GridLayout(7, 7));
-		Tile[][] newBoard = this.controller.getBoard();
 		
 		for (int i = 0; i < 7; i++)
 		{
 			for (int j = 0; j < 7; j++)
+			{
+				JLabel jLabelTemp = new JLabel(new ImageIcon());
+				
+				this.board[j][i] = jLabelTemp;
+					
+				this.tilePanel.add(jLabelTemp);
+			}
+		}
+	}
+	
+	private void setArrowButtonsEnabled(boolean isEnabled)
+	{
+		for(JButton button : this.listArrowButtons)
+		{
+			button.setEnabled(isEnabled);
+		}
+	}
+	
+	@Override
+	public void updateBoard(Tile[][] newBoard) 
+	{
+		for(int i = 0; i < 7; i++)
+		{
+			for(int j = 0; j < 7; j++)
 			{
 				ImageIcon imageIconTemp;
 				BufferedImage buffImgTemp;
@@ -418,34 +442,8 @@ public class GameView extends JFrame implements ActionListener, IGameView
 				}
 				
 				imageIconTemp = new ImageIcon(buffImgTemp);
-				JLabel jLabelTemp = new JLabel(imageIconTemp);
 				
-				this.board[j][i] = jLabelTemp;
-					
-				this.tilePanel.add(jLabelTemp);
-			}
-		}
-	}
-	
-	private void setArrowButtonsEnabled(boolean isEnabled)
-	{
-		for(JButton button : this.listArrowButtons)
-		{
-			button.setEnabled(isEnabled);
-		}
-	}
-	
-	@Override
-	public void updateBoard(Tile[][] newBoardPaths) 
-	{
-		for(int i = 0; i < 7; i++)
-		{
-			for(int j = 0; j < 7; j++)
-			{
-				URL input = this.getClass().getResource(newBoardPaths[j][i].getPath());
-				ImageIcon img = new ImageIcon(input);
-				
-				this.board[j][i].setIcon(img);
+				this.board[j][i].setIcon(imageIconTemp);
 			}
 		}
 	}
@@ -477,8 +475,6 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	@Override
 	public void showGameView()
 	{
-
-		this.setLayout();
 		this.setVisible(true);
 	}
 
