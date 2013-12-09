@@ -51,6 +51,7 @@ public class Model
 	public void addPlayer(Player player)
 	{
 		this.playerList.add(player);
+		this.buildGameForPlayersAndObjectives();
 		//this.activePlayers = playerList.size() - 1;
 	}
 	
@@ -492,7 +493,30 @@ public class Model
 	public void addObserver(String observerID, IClientGameController observer)
 	{
 		this.observers.put(observerID, observer);
-
+		
+		Player newPlayer;
+		
+		switch(this.playerList.size())
+		{
+		case 0 :
+			newPlayer = new Player("Player " + observerID, Avatar.commando, this.getBoard()[0][0], 1);
+			break;
+		case 1 :
+			newPlayer = new Player("Player " + observerID, Avatar.darkVador, this.getBoard()[6][0], 2);
+			break;
+		case 2 :
+			newPlayer = new Player("Player " + observerID, Avatar.pirate, this.getBoard()[6][6], 3);
+			break;
+		case 3 :
+			newPlayer = new Player("Player " + observerID, Avatar.viking, this.getBoard()[0][6], 4);
+			break;
+		default:
+			newPlayer = null;
+			break;
+		}
+		
+		this.addPlayer(newPlayer);
+		
 		new BoardNotifyer(observer, this.board, this.nextTile, this.observers.size() - 1, Thread.currentThread()).start();
 		new TurnNotifyer(observer, this.activePlayer, Thread.currentThread()).start();
 	}
