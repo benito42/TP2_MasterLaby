@@ -25,7 +25,7 @@ public enum Avatar implements Serializable
 		this.objective3 = obj3;
 	}
 	
-	public String getAvatar(){return this.avatar;}
+	public String getAvatarPath(){return this.avatar;}
 	public String getObj1(){return this.objective1;}
 	public String getObj2(){return this.objective2;}
 	public String getObj3(){return this.objective3;}

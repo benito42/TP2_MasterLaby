@@ -1,19 +1,13 @@
 package client;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -29,7 +23,7 @@ import javax.swing.JPanel;
 
 import server.Avatar;
 import server.Direction;
-import server.IGameController;
+import server.Player;
 import server.Tile;
 
 public class GameView extends JFrame implements ActionListener, IGameView
@@ -37,6 +31,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private static final long serialVersionUID = 8358872970122547830L;
 
 	private final ClientGameController controller;
+	private int noPlayer;
 	
 	//private JPanel mainPanel = new JPanel();
 	private JPanel boardPanel = new JPanel();
@@ -72,13 +67,17 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	
 	private JButton btnNextTurn = new JButton("Fin de tour");
 	
+	BufferedImage backGroundImage;
+	BufferedImage frontImage;
+	BufferedImage scaled;
+	JLabel label;
+	
 	public GameView(ClientGameController controller)
 	{
 		this.controller = controller;
 		this.addWindowListener(new WindowHandler());
 		
 		this.setArrowButtons();
-		this.setLayout();
 		
 		this.btnNextTurn.setEnabled(false);
 	}
@@ -277,7 +276,6 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		}
 	}
 	
-	@Override
 	public void setLayout()
 	{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -313,7 +311,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		ImageIcon imgTile = new ImageIcon(inputTile);
 		JLabel tempTile = new JLabel(imgTile);
 		
-		URL inputAvatar = this.getClass().getResource(Avatar.commando.getAvatar());
+		URL inputAvatar = this.getClass().getResource(Avatar.commando.getAvatarPath());
 		ImageIcon imgAvatar = new ImageIcon(inputAvatar);
 		JLabel tempAvatar = new JLabel(imgAvatar);
 		
@@ -321,6 +319,64 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		layeredPane.add(tempAvatar, 1);
 		
 		this.tilePanel.add(layeredPane);
+	}
+	
+	private BufferedImage buildPlayers(LinkedList<Player> playerList)
+	{
+		BufferedImage buffImageTemp = null;
+		for (Player p : playerList)
+			{
+				if (buffImageTemp == null)
+				{
+					buffImageTemp = imageOnImage(createBufferedImage(this.controller.getBoard()[0][0].getPath()), 
+							createBufferedImage(p.getAvatar().getAvatarPath()), 
+							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
+				}
+				else
+				{
+					buffImageTemp = imageOnImage(buffImageTemp, 
+							createBufferedImage(p.getAvatar().getAvatarPath()), 
+							PositionOnTile.downLeft.getPositionOnTile(p.getPlayerNumber()));
+				}
+			}
+		
+		return buffImageTemp;
+	}
+	
+	private BufferedImage createBufferedImage(String path)
+	{
+		URL inputTile = this.getClass().getResource(path);
+		BufferedImage buffImg = null;
+		try
+		{
+			buffImg = ImageIO.read(inputTile);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return buffImg;
+	}
+	
+	private BufferedImage imageOnImage(BufferedImage backGroundImage, BufferedImage frontImage, PositionOnTile positionOnTile)
+	{
+		this.backGroundImage = backGroundImage;
+		this.frontImage = frontImage;
+		
+	    scaled = new BufferedImage(frontImage.getWidth()/2,frontImage.getHeight()/2,BufferedImage.TYPE_INT_RGB);
+	    Graphics g = scaled.getGraphics();
+	    g.drawImage(frontImage,0,0,scaled.getWidth(),scaled.getHeight(),null);
+	    g.dispose();
+	
+	    Graphics g2 = backGroundImage.getGraphics();
+		int x = positionOnTile.getX();
+		int y = positionOnTile.getY();
+	
+		g2.drawImage( scaled, x, y, null );
+		g2.dispose();
+	
+	    return backGroundImage;
 	}
 	
 	private void buildBoardLayout()
@@ -336,16 +392,37 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private void setTileGridLayoutFromTable()
 	{
 		this.tilePanel.setLayout(new GridLayout(7, 7));
+		Tile[][] newBoard = this.controller.getBoard();
 		
 		for (int i = 0; i < 7; i++)
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				JLabel temp = new JLabel(new ImageIcon());
+				ImageIcon imageIconTemp;
+				BufferedImage buffImgTemp;
 				
-				this.board[j][i] = temp;
+				//create tile with objectives
+				if (newBoard[j][i].getObjective() != null && newBoard[j][i].getObjective().isObjectiveReached() == false)
+				{
+					buffImgTemp = imageOnImage(createBufferedImage(newBoard[0][0].getPath()), 
+							createBufferedImage(newBoard[0][0].getObjective().getPath()), PositionOnTile.mid);
+				}
+				else//create tile without objectives
+				{
+					buffImgTemp = createBufferedImage(newBoard[j][i].getPath());
+				}
+				//add player to tile
+				if (!newBoard[j][i].getPlayerList().isEmpty())
+				{
+					buffImgTemp = buildPlayers(newBoard[j][i].getPlayerList());
+				}
 				
-				this.tilePanel.add(temp);
+				imageIconTemp = new ImageIcon(buffImgTemp);
+				JLabel jLabelTemp = new JLabel(imageIconTemp);
+				
+				this.board[j][i] = jLabelTemp;
+					
+				this.tilePanel.add(jLabelTemp);
 			}
 		}
 	}
@@ -359,13 +436,13 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	}
 	
 	@Override
-	public void updateBoard(String[][] newBoardPaths) 
+	public void updateBoard(Tile[][] newBoardPaths) 
 	{
 		for(int i = 0; i < 7; i++)
 		{
 			for(int j = 0; j < 7; j++)
 			{
-				URL input = this.getClass().getResource(newBoardPaths[j][i]);
+				URL input = this.getClass().getResource(newBoardPaths[j][i].getPath());
 				ImageIcon img = new ImageIcon(input);
 				
 				this.board[j][i].setIcon(img);
@@ -374,17 +451,34 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	}
 	
 	@Override
-	public void updateNextTile(String nextTilePath) 
+	public void updateNextTile(Tile nextTilePath) 
 	{
-		URL input = this.getClass().getResource(nextTilePath);
+		URL input = this.getClass().getResource(nextTilePath.getPath());
 		ImageIcon img = new ImageIcon(input);
 		
 		this.nextTile.setIcon(img);
 	}
 	
 	@Override
+	public void updateNoPlayer(int noPlayer) 
+	{
+		this.noPlayer = noPlayer;
+	}
+	
+	@Override
+	public void updateTurnChange(int noActivePlayer) 
+	{
+		if(this.noPlayer == noActivePlayer)
+		{
+			this.setArrowButtonsEnabled(true);
+		}
+	}
+	
+	@Override
 	public void showGameView()
 	{
+
+		this.setLayout();
 		this.setVisible(true);
 	}
 
@@ -452,6 +546,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		{
 			if(ae.getSource() == this.btnNextTurn)
 			{
+				this.btnNextTurn.setEnabled(false);
 				this.controller.nextPlayer();
 			}
 		}

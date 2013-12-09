@@ -12,7 +12,7 @@ import server.Tile.TILETYPE;
 public class Model
 {
 	private int turnNbr = 1;
-	private int activePlayers = 0;
+	private int activePlayer = 0;
 	private LinkedList<Player> playerList;
 	private final Map<String, IClientGameController> observers = new HashMap<String, IClientGameController>();
 	private boolean isGameOver = false;
@@ -47,25 +47,26 @@ public class Model
 	
 	public void removePlayer()
 	{
-		this.playerList.remove(this.activePlayers);
-		this.activePlayers--;
-		
+		this.playerList.remove(this.activePlayer);
+		this.nextPlayer();
 	}
 	
 	public Player getActivePlayer()
 	{
-		return this.playerList.get(this.activePlayers);
+		return this.playerList.get(this.activePlayer);
 	}
 	
 	public void nextPlayer()
 	{
-		this.activePlayers++;
+		this.activePlayer++;
 		
-		if (this.activePlayers + 1 > this.playerList.size())
+		if (this.activePlayer + 1 > this.playerList.size())
 		{
-			this.activePlayers = 0;
+			this.activePlayer = 0;
 			this.turnNbr++;
 		}
+		
+		this.notifyTurnChange();
 	}
 
 	public int getNbrPlayer()
@@ -389,21 +390,26 @@ public class Model
 			break;
 		}
 		
-		this.notifyAllObservers();
+		this.notifyNewBoard();
 	}
 	
-	private void notifyAllObservers()
+	private void notifyNewBoard()
 	{
-		new Thread(new ObserversNotifyer()).start();
+		new Thread(new BoardUpdater()).start();
+	}
+	
+	private void notifyTurnChange()
+	{
+		new Thread(new TurnUpdater()).start();
 	}
 
-	private class ObserversNotifyer implements Runnable
+	private class BoardUpdater implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			String[][] newBoard = getTilesPaths();
-			String newNextTile = nextTile.getPath();
+			Tile[][] newBoard = board;
+			Tile newNextTile = nextTile;
 
 			Iterator<String> observersIterator = observers.keySet().iterator();
 			while (observersIterator.hasNext())
@@ -444,26 +450,59 @@ public class Model
 		return tilesPaths;
 	}
 	
+	private class TurnUpdater implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			int noActivePlayer = activePlayer;
+
+			Iterator<String> observersIterator = observers.keySet().iterator();
+			while (observersIterator.hasNext())
+			{
+				String clientID = observersIterator.next();
+				IClientGameController obs = observers.get(clientID);
+				if (obs == null)
+					observersIterator.remove();
+				else
+				{
+					try
+					{
+						obs.updateTurnChange(noActivePlayer);
+					}
+					catch (UndeclaredThrowableException ute)
+					{// The observer is unreachable, remove it right away (we could be more flexible here and require a certain threshold of failure before kicking him)
+						observersIterator.remove();
+					}
+				}
+			}
+
+		}
+	}
+	
 	public void addObserver(String observerID, IClientGameController observer)
 	{
 		this.observers.put(observerID, observer);
 
-		new ObserverNotifyer(observer, this.getTilesPaths(), this.nextTile.getPath(), Thread.currentThread()).start();
+		new BoardNotifyer(observer, this.board, this.nextTile, this.observers.size() - 1, Thread.currentThread()).start();
+		new TurnNotifyer(observer, this.activePlayer, Thread.currentThread()).start();
 	}
-
-	private class ObserverNotifyer extends Thread
+	
+	private class BoardNotifyer extends Thread
 	{
 		private final IClientGameController obs;
-		private final String[][] newBoard;
-		private final String newNextTile;
+		private final Tile[][] newBoard;
+		private final Tile newNextTile;
 		private final Thread father;
+		private final int noActivePlayer;
 
-		private ObserverNotifyer(IClientGameController obs, String[][] newBoard, String newNextTile, Thread father)
+		private BoardNotifyer(IClientGameController obs, Tile[][] newBoard, Tile newNextTile, int noActivePlayer, Thread father)
 		{
 			this.obs = obs;
 			this.newBoard = newBoard;
 			this.newNextTile = newNextTile;
 			this.father = father;
+			this.noActivePlayer = noActivePlayer;
 		}
 
 		@Override
@@ -482,6 +521,39 @@ public class Model
 			{
 				obs.updateBoard(this.newBoard);
 				obs.updateNextTile(this.newNextTile);
+				obs.updateNoPlayer(this.noActivePlayer);
+			}
+		}
+	}
+	
+	private class TurnNotifyer extends Thread
+	{
+		private final IClientGameController obs;
+		private final Thread father;
+		private final int noActivePlayer;
+
+		private TurnNotifyer(IClientGameController obs, int noActivePlayer, Thread father)
+		{
+			this.obs = obs;
+			this.father = father;
+			this.noActivePlayer = noActivePlayer;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				// We wait for the parent thread to terminate (the connection from the client to close) before notifying (and thus connecting back to) the client.
+				this.father.join();
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				obs.updateTurnChange(this.noActivePlayer);
 			}
 		}
 	}

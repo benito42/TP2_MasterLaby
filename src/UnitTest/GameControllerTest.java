@@ -1,7 +1,6 @@
 package UnitTest;
 
 import static org.junit.Assert.*;
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,6 @@ import org.junit.Test;
 import server.Avatar;
 import server.Direction;
 import server.GameController;
-import server.Model;
 import server.Player;
 import server.Tile;
 import server.Tile.TILETYPE;
@@ -26,10 +24,10 @@ public class GameControllerTest
 	public void setUp() throws Exception
 	{
 		controller = new GameController();
-		p1 = new Player("Bob", Avatar.commando, controller.getModel().getTile(0,  0));
-		p2 = new Player("Ginette", Avatar.darkVador, controller.getModel().getTile(6,  0));
-		p3 = new Player("Henry", Avatar.ninja, controller.getModel().getTile(6,  6));
-		p4 = new Player("Steve", Avatar.pirate, controller.getModel().getTile(0,  6));
+		p1 = new Player("Bob", Avatar.commando, controller.getModel().getTile(0,  0), 1);
+		p2 = new Player("Ginette", Avatar.darkVador, controller.getModel().getTile(6,  0), 2);
+		p3 = new Player("Henry", Avatar.ninja, controller.getModel().getTile(6,  6), 3);
+		p4 = new Player("Steve", Avatar.pirate, controller.getModel().getTile(0,  6), 4);
 		
 	}
 	

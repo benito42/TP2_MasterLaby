@@ -162,15 +162,15 @@ public class GameController extends Server implements IGameController
 	}
 	
 	@Override
-	public String getNextTile()
+	public Tile getNextTile()
 	{
-		return this.model.getNextTile().getPath();
+		return this.model.getNextTile();
 	}
 	
 	@Override
-	public String[][] getBoard()
+	public Tile[][] getBoard()
 	{
-		return this.model.getTilesPaths();
+		return this.model.getBoard();
 	}
 	
 	private class MyServerListener implements IServerListener

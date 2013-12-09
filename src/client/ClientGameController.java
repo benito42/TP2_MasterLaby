@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import server.Direction;
 import server.GameController;
 import server.IGameController;
+import server.Tile;
 
 import net.sf.lipermi.exception.LipeRMIException;
 import net.sf.lipermi.handler.CallHandler;
@@ -92,7 +93,7 @@ public class ClientGameController implements IClientGameController
 	
 	private class ServerContacterGetBoard extends TimerTask
 	{
-		private String[][] newBoard;
+		private Tile[][] newBoard;
 		
 		@Override
 		public void run()
@@ -100,7 +101,7 @@ public class ClientGameController implements IClientGameController
 			this.newBoard = myServiceCaller.getBoard();
 		}
 		
-		public String[][] getNewBoard()
+		public Tile[][] getNewBoard()
 		{
 			return this.newBoard;
 		}
@@ -108,7 +109,7 @@ public class ClientGameController implements IClientGameController
 	
 	private class ServerContacterGetNextTile extends TimerTask
 	{
-		private String newNextTile;
+		private Tile newNextTile;
 		
 		@Override
 		public void run()
@@ -116,21 +117,30 @@ public class ClientGameController implements IClientGameController
 			this.newNextTile = myServiceCaller.getNextTile();
 		}
 		
-		public String getNewNextTile()
+		public Tile getNewNextTile()
 		{
 			return this.newNextTile;
 		}
 	}
 	
+	private class ServerContacterEndTurn extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.nextPlayer();
+		}
+	}
+	
 
 	@Override
-	public String[][] getBoard() 
+	public Tile[][] getBoard() 
 	{
 		return new ServerContacterGetBoard().getNewBoard();
 	}
 	
 	@Override
-	public String getNewNextTile() 
+	public Tile getNewNextTile() 
 	{
 		return new ServerContacterGetNextTile().getNewNextTile();
 	}
@@ -138,7 +148,7 @@ public class ClientGameController implements IClientGameController
 	@Override
 	public void nextPlayer()
 	{
-		this.myServiceCaller.nextPlayer();
+		new ServerContacterEndTurn();
 	}
 	
 	@Override
@@ -148,14 +158,26 @@ public class ClientGameController implements IClientGameController
 	}
 	
 	@Override
-	public void updateBoard(String[][] newBoard) 
+	public void updateBoard(Tile[][] newBoard) 
 	{
 		this.view.updateBoard(newBoard);
 	}
 
 	@Override
-	public void updateNextTile(String nextTile) 
+	public void updateNextTile(Tile nextTile) 
 	{
 		this.view.updateNextTile(nextTile);
+	}
+
+	@Override
+	public void updateNoPlayer(int noPlayer) 
+	{
+		this.view.updateNoPlayer(noPlayer);
+	}
+
+	@Override
+	public void updateTurnChange(int noActivePlayer) 
+	{
+		this.view.updateTurnChange(noActivePlayer);
 	}
 }
