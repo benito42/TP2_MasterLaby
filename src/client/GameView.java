@@ -552,7 +552,9 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			else if(ae.getSource() == this.btnQuit)
 			{
 				this.controller.quitGame();
+				this.controller.closeRequest();
 				this.dispose();
+				System.exit(0);
 			}
 		}
 	}
@@ -573,8 +575,10 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		@Override
 		public void windowClosing(WindowEvent e)
 		{
+			controller.quitGame();
 			controller.closeRequest();
 			dispose();
+			System.exit(0);
 		}
 
 		@Override

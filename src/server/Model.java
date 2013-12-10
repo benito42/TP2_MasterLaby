@@ -62,9 +62,27 @@ public class Model
 				if(player.getObjectiveList()[i] == obj)
 				{
 					obj.setObjectiveReached(true);
+					if(this.checkIfWinningTurn(player.getObjectiveList()));
+					{
+						//TODO: Programmer une fin de partie plus développée
+						System.exit(0);
+					}
 				}
 			}
 		}
+	}
+	
+	private boolean checkIfWinningTurn(Objective[] objectives)
+	{
+		for(int j = 0; j < objectives.length; j++)
+		{
+			if(!objectives[j].isObjectiveReached())
+			{
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public void addPlayer(Player player)
@@ -513,10 +531,10 @@ public class Model
 	{
 		this.observers.put(observerID, observer);
 		
-		this.newPlayer(observerID);
-		
 		new BoardNotifyer(observer, this.board, this.nextTile, this.observers.size() - 1, Thread.currentThread()).start();
 		new TurnNotifyer(observer, this.activePlayer, Thread.currentThread()).start();
+		
+		this.newPlayer(observerID);
 	}
 	
 	private void newPlayer(String observerID)
@@ -618,13 +636,16 @@ public class Model
 	public void unregisterObserver(String clientID)
 	{
 		this.observers.remove(clientID);
-		
+	}
+	
+	public void kickPlayer()
+	{
 		Player playerToDelete = this.playerList.get(this.activePlayer);
 		
 		playerToDelete.getCurrentTile().playerList.remove(playerToDelete);
-		playerToDelete.setCurrentTile(null);	
+		playerToDelete.setCurrentTile(null);
 		
-		this.playerList.remove(playerToDelete);
+		this.removePlayer();
 		this.notifyNewBoard();
 	}
 }

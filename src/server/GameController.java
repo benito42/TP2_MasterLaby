@@ -208,4 +208,10 @@ public class GameController extends Server implements IGameController
 		String clientID = socket.getInetAddress() + ":" + socket.getPort();
 		return clientID;
 	}
+
+	@Override
+	public void quitGame() 
+	{
+		this.model.kickPlayer();
+	}
 }

@@ -9,6 +9,7 @@ public interface IGameController
 	public void addPlayer(Player player);
 	public void removePlayer();
 	public void nextPlayer();
+	public void quitGame();
 	
 	public void gameOver();
 	public Tile getNextTile();

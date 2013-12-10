@@ -46,7 +46,7 @@ public class ClientGameController implements IClientGameController
 			callHandler.registerGlobal(IClientGameController.class, this);
 			// callHandler.exportObject(ModelObserver.class, this);
 
-			this.myServiceCaller.addObserver(this);
+			this.connect(this);
 
 		}
 		catch (IOException e)
@@ -225,7 +225,23 @@ public class ClientGameController implements IClientGameController
 		@Override
 		public void run()
 		{
-			myServiceCaller.unregisterObserver();
+			myServiceCaller.quitGame();
+		}
+	}
+	
+	private class ServerContacterConnect extends TimerTask
+	{
+		IClientGameController controller;
+		
+		public ServerContacterConnect(IClientGameController ctrl)
+		{
+			this.controller = ctrl;
+		}
+		
+		@Override
+		public void run()
+		{
+			myServiceCaller.addObserver(this.controller);
 		}
 	}
 
@@ -257,5 +273,11 @@ public class ClientGameController implements IClientGameController
 	public void quitGame() 
 	{
 		new Timer().schedule(new ServerContacterQuit(), 1);
+	}
+
+	@Override
+	public void connect(IClientGameController controller) 
+	{
+		new Timer().schedule(new ServerContacterConnect(controller), 1);
 	}
 }
