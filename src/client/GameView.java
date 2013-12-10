@@ -64,6 +64,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 	private JLabel nextTile = new JLabel();
 	
 	private JButton btnNextTurn = new JButton("Fin de tour");
+	private JButton btnQuit = new JButton("Quitter");
 	
 	private BufferedImage backGroundImage;
 	private BufferedImage frontImage;
@@ -144,9 +145,15 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			break;
 			
 		case DOWN:
-			bottomArrowPanel.setLayout(new GridLayout(0, 9));
+			this.bottomArrowPanel.setLayout(new GridLayout(0, 9));
 			
-			for (int k = 0; k < 8; k++)
+			this.btnQuit.addActionListener(this);
+			this.btnQuit.setSize(this.btnDownCenterArrow.getWidth(), this.btnDownCenterArrow.getHeight());
+			this.btnQuit.setBorder(BorderFactory.createEmptyBorder());
+			
+			this.bottomArrowPanel.add(this.btnQuit);
+			
+			for (int k = 1; k < 8; k++)
 			{
 				URL input = this.getClass().getResource("/img/arrow_up.jpg");
 				ImageIcon img = new ImageIcon(input);
@@ -165,7 +172,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			this.btnNextTurn.setSize(this.btnDownCenterArrow.getWidth(), this.btnDownCenterArrow.getHeight());
 			this.btnNextTurn.setBorder(BorderFactory.createEmptyBorder());
 			
-			bottomArrowPanel.add(this.btnNextTurn);
+			this.bottomArrowPanel.add(this.btnNextTurn);
 			break;
 			
 		case LEFT:
@@ -464,6 +471,7 @@ public class GameView extends JFrame implements ActionListener, IGameView
 		if(this.noPlayer == noActivePlayer)
 		{
 			this.setArrowButtonsEnabled(true);
+			this.btnQuit.setEnabled(true);
 		}
 	}
 	
@@ -538,7 +546,13 @@ public class GameView extends JFrame implements ActionListener, IGameView
 			if(ae.getSource() == this.btnNextTurn)
 			{
 				this.btnNextTurn.setEnabled(false);
+				this.btnQuit.setEnabled(false);
 				this.controller.nextPlayer();
+			}
+			else if(ae.getSource() == this.btnQuit)
+			{
+				this.controller.quitGame();
+				this.dispose();
 			}
 		}
 	}

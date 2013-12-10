@@ -15,7 +15,7 @@ public class MenuController implements IMenuController
 	}
 
 	@Override
-	public void showRules() 
+	public void showRules()
 	{
 		new RulesView();
 	}

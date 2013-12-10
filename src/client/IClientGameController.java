@@ -15,6 +15,7 @@ public interface IClientGameController
 	public void moveDown();
 	public void moveLeft();
 	public void moveRight();
+	public void quitGame();
 	
 	public Tile[][] getBoard();
 	public Tile getNewNextTile();

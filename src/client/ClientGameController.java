@@ -219,7 +219,15 @@ public class ClientGameController implements IClientGameController
 			myServiceCaller.moveRight();
 		}
 	}
-
+	
+	private class ServerContacterQuit extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			myServiceCaller.unregisterObserver();
+		}
+	}
 
 	@Override
 	public void moveUp() 
@@ -243,5 +251,11 @@ public class ClientGameController implements IClientGameController
 	public void moveRight() 
 	{
 		new Timer().schedule(new ServerContacterMoveRight(), 1);
+	}
+
+	@Override
+	public void quitGame() 
+	{
+		new Timer().schedule(new ServerContacterQuit(), 1);
 	}
 }

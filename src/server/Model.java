@@ -45,9 +45,28 @@ public class Model
 		playerTemp.getCurrentTile().playerList.remove(playerTemp);
 		playerTemp.setCurrentTile(tile);
 		playerTemp.getCurrentTile().playerList.add(playerTemp);
+		
+		this.checkIfObjectiveReached(playerTemp);
+		
 		this.notifyNewBoard();
 		
 	}
+	
+	private void checkIfObjectiveReached(Player player)
+	{
+		Objective obj = player.getCurrentTile().getObjective();
+		if(obj != null)
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				if(player.getObjectiveList()[i] == obj)
+				{
+					obj.setObjectiveReached(true);
+				}
+			}
+		}
+	}
+	
 	public void addPlayer(Player player)
 	{
 		this.playerList.add(player);
@@ -494,6 +513,14 @@ public class Model
 	{
 		this.observers.put(observerID, observer);
 		
+		this.newPlayer(observerID);
+		
+		new BoardNotifyer(observer, this.board, this.nextTile, this.observers.size() - 1, Thread.currentThread()).start();
+		new TurnNotifyer(observer, this.activePlayer, Thread.currentThread()).start();
+	}
+	
+	private void newPlayer(String observerID)
+	{
 		Player newPlayer;
 		
 		switch(this.playerList.size())
@@ -516,9 +543,6 @@ public class Model
 		}
 		
 		this.addPlayer(newPlayer);
-		
-		new BoardNotifyer(observer, this.board, this.nextTile, this.observers.size() - 1, Thread.currentThread()).start();
-		new TurnNotifyer(observer, this.activePlayer, Thread.currentThread()).start();
 	}
 	
 	private class BoardNotifyer extends Thread
@@ -594,5 +618,13 @@ public class Model
 	public void unregisterObserver(String clientID)
 	{
 		this.observers.remove(clientID);
+		
+		Player playerToDelete = this.playerList.get(this.activePlayer);
+		
+		playerToDelete.getCurrentTile().playerList.remove(playerToDelete);
+		playerToDelete.setCurrentTile(null);	
+		
+		this.playerList.remove(playerToDelete);
+		this.notifyNewBoard();
 	}
 }
